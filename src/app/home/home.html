@@ -1,0 +1,6 @@
+<div class="root">
+    <input [ngModel]="artistSearchValue()" (ngModelChange)="artistSearchValue.set($event)" >
+    <button matButton (click)="searchArtist()">Search</button>
+    
+    <app-artist-list [value]="result()"></app-artist-list>
+</div>

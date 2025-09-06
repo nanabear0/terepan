@@ -1,0 +1,7 @@
+<p>
+    <a [routerLink]="['/']" routerLinkActive="active" ariaCurrentWhenActive="page">
+        <mat-icon svgIcon="back"></mat-icon>
+    </a>
+    {{artist()?.name}}
+</p>
+<app-album-list [value]="albums()"></app-album-list>
