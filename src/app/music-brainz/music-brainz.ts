@@ -40,10 +40,12 @@ export class MusicBrainz {
       secondaryTypes: raw['secondary-types'],
     };
   }
+
   private mapAlbums(raw: any): Album[] {
     return raw['release-groups']
       ?.map(this.mapAlbum)
-      .filter((album: Album) => album.primaryType === 'Album' && !album.secondaryTypes?.length);
+      .filter((album: Album) => album.primaryType === 'Album' && !album.secondaryTypes?.length)
+      .sort((a1: Album, a2: Album) => a1.firstReleaseDate < a2.firstReleaseDate);
   }
 
   public searchArtist(artistName: string): Observable<Artist[]> {

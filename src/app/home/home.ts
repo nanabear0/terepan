@@ -1,24 +1,41 @@
 import { Component, inject, signal } from '@angular/core';
-import { FormsModule } from '@angular/forms';
-import { MatButtonModule } from '@angular/material/button';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
-import { MusicBrainz } from '../music-brainz/music-brainz';
+import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { ButtonModule } from 'primeng/button';
+import { FieldsetModule } from 'primeng/fieldset';
+import { FloatLabel } from 'primeng/floatlabel';
+import { InputGroupModule } from 'primeng/inputgroup';
+import { InputGroupAddonModule } from 'primeng/inputgroupaddon';
+import { InputTextModule } from 'primeng/inputtext';
 import { ArtistList } from '../artist-list/artist-list';
 import { Artist } from '../music-brainz/artist';
+import { MusicBrainz } from '../music-brainz/music-brainz';
 @Component({
   selector: 'app-home',
-  imports: [FormsModule, MatFormFieldModule, MatInputModule, MatButtonModule, ArtistList],
+  imports: [
+    FormsModule,
+    ArtistList,
+    ReactiveFormsModule,
+    InputGroupModule,
+    InputGroupAddonModule,
+    InputTextModule,
+    FloatLabel,
+    ButtonModule,
+    FieldsetModule,
+  ],
   templateUrl: './home.html',
   styleUrl: './home.scss',
 })
 export class Home {
   musicBrainzService = inject(MusicBrainz);
-  artistSearchValue = signal('');
+  artistForm = new FormGroup({ name: new FormControl('') });
+
   result = signal<Artist[]>([]);
-  public async searchArtist() {
-    this.musicBrainzService.searchArtist(this.artistSearchValue()).forEach((result: Artist[]) => {
-      this.result.set(result);
-    });
+
+  public async search() {
+    this.musicBrainzService
+      .searchArtist(this.artistForm.value.name ?? '')
+      .forEach((result: Artist[]) => {
+        this.result.set(result);
+      });
   }
 }

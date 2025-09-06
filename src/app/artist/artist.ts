@@ -1,14 +1,13 @@
 import { Component, inject, signal } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { AlbumList } from '../album-list/album-list';
 import { Album } from '../music-brainz/album';
 import { Artist as Art } from '../music-brainz/artist';
 import { MusicBrainz } from '../music-brainz/music-brainz';
-import { AlbumList } from '../album-list/album-list';
-import { RouterLink } from '@angular/router';
-import { MatIconModule } from '@angular/material/icon';
+
 @Component({
   selector: 'app-artist',
-  imports: [AlbumList, MatIconModule, RouterLink],
+  imports: [AlbumList],
   templateUrl: './artist.html',
   styleUrl: './artist.scss',
 })
@@ -17,7 +16,7 @@ export class Artist {
   private route = inject(ActivatedRoute);
   musicBrainzService = inject(MusicBrainz);
 
-  artist = signal<Art>(null!);
+  artist = signal<Art | undefined>(undefined);
   albums = signal<Album[]>([]);
   constructor() {
     this.artistId = this.route.snapshot.paramMap.get('id')!;

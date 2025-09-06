@@ -1,2 +1,14 @@
-<button (click)="goHome()">Home</button>
-<router-outlet />
+<div class="app-root">
+  <p-toolbar>
+    <ng-template #start>
+      <div>
+        <a routerLink="/" pButton>
+          <span pButtonLabel>Home</span>
+        </a>
+      </div>
+    </ng-template>
+  </p-toolbar>
+  <div class="content">
+    <router-outlet />
+  </div>
+</div>

@@ -1,14 +1,15 @@
 import {
   ApplicationConfig,
-  importProvidersFrom,
   provideBrowserGlobalErrorListeners,
   provideZonelessChangeDetection,
 } from '@angular/core';
 import { provideRouter, withComponentInputBinding } from '@angular/router';
 
-import { routes } from './app.routes';
 import { provideHttpClient, withFetch } from '@angular/common/http';
-import { MatIconModule } from '@angular/material/icon';
+import Aura from '@primeuix/themes/aura';
+import { providePrimeNG } from 'primeng/config';
+import { routes } from './app.routes';
+import { provideAnimations } from '@angular/platform-browser/animations';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -16,6 +17,11 @@ export const appConfig: ApplicationConfig = {
     provideZonelessChangeDetection(),
     provideRouter(routes, withComponentInputBinding()),
     provideHttpClient(withFetch()),
-    importProvidersFrom(MatIconModule),
+    provideAnimations(),
+    providePrimeNG({
+      theme: {
+        preset: Aura,
+      },
+    }),
   ],
 };

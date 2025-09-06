@@ -1,43 +1,26 @@
-<table mat-table [dataSource]="value()" class="mat-elevation-z8">
-  <ng-container matColumnDef="name">
-    <th mat-header-cell *matHeaderCellDef> Name</th>
-    <td mat-cell *matCellDef="let element">
-        <a [routerLink]="['/artist', element.id]" routerLinkActive="active" ariaCurrentWhenActive="page">{{element.name}}</a>
-    </td>
-  </ng-container>
-  <ng-container matColumnDef="sortName">
-    <th mat-header-cell *matHeaderCellDef> Sort name </th>
-    <td mat-cell *matCellDef="let element"> {{element['sortName']}} </td>
-  </ng-container>
-  <ng-container matColumnDef="type">
-    <th mat-header-cell *matHeaderCellDef> Type </th>
-    <td mat-cell *matCellDef="let element"> {{element.type}} </td>
-  </ng-container>
-  <ng-container matColumnDef="gender">
-    <th mat-header-cell *matHeaderCellDef> Gender </th>
-    <td mat-cell *matCellDef="let element"> {{element.gender}} </td>
-  </ng-container>
-  <ng-container matColumnDef="area">
-    <th mat-header-cell *matHeaderCellDef> Area </th>
-    <td mat-cell *matCellDef="let element"> {{element.area}} </td>
-  </ng-container>
-  <ng-container matColumnDef="begin">
-    <th mat-header-cell *matHeaderCellDef> Begin </th>
-    <td mat-cell *matCellDef="let element"> {{element.begin}} </td>
-  </ng-container>
-  <ng-container matColumnDef="beginArea">
-    <th mat-header-cell *matHeaderCellDef> Begin area </th>
-    <td mat-cell *matCellDef="let element"> {{element['beginArea']}} </td>
-  </ng-container>
-  <ng-container matColumnDef="end">
-    <th mat-header-cell *matHeaderCellDef> End </th>
-    <td mat-cell *matCellDef="let element"> {{element.end}} </td>
-  </ng-container>
-  <ng-container matColumnDef="endArea">
-    <th mat-header-cell *matHeaderCellDef> End area </th>
-    <td mat-cell *matCellDef="let element"> {{element['endArea']}} </td>
-  </ng-container>
-
-  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-  <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-</table>
+<p-table [value]="value()" [scrollable]="true" scrollHeight="100%">
+  <ng-template #header>
+    <tr>
+      <th>Name</th>
+      <th>Area</th>
+      <th>Begin</th>
+      <th>End</th>
+    </tr>
+  </ng-template>
+  <ng-template #body let-artist>
+    <tr>
+      <td>
+        <a
+          [routerLink]="['/artist', artist.id]"
+          routerLinkActive="active"
+          ariaCurrentWhenActive="page"
+          >{{ artist.name }}</a
+        >
+      </td>
+      <td>{{ artist.sortName }}</td>
+      <td>{{ artist.area }}</td>
+      <td>{{ artist.begin }}</td>
+      <td>{{ artist.end }}</td>
+    </tr>
+  </ng-template>
+</p-table>

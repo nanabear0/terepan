@@ -1,5 +1,19 @@
 .root {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
+    display: grid;
+    grid-template-rows: min-content 1fr;
+    max-height: 100%;
+    gap: 12px;
+}
+.input-fields {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-auto-rows: auto;
+    gap: 12px;
+}
+.button {
+    grid-column: 1 / -1;
+}
+.table-container {
+    min-height: 0;
+    max-height: 100%;
 }
