@@ -1,7 +1,10 @@
-<p>
-  {{ artist()?.name }}
-</p>
-
-@if (albums().length){
-<app-album-list [value]="albums()"></app-album-list>
-}
+<div class="root">
+  <h2>
+    {{ artist()?.name }}
+  </h2>
+  <div class="table-container">
+    @if (albums().length){
+    <app-album-list [value]="albums()"></app-album-list>
+    }
+  </div>
+</div>

@@ -1,0 +1,11 @@
+.root {
+    display: grid;
+    grid-template-rows: min-content 1fr;
+    max-height: 100%;
+    gap: 12px;
+}
+
+.table-container {
+    min-height: 0;
+    max-height: 100%;
+}

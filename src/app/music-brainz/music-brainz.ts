@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
-import { map, Observable } from 'rxjs';
+import { map, mergeMap, Observable, of } from 'rxjs';
 import { Album } from './album';
 import { Artist } from './artist';
 
@@ -50,7 +50,7 @@ export class MusicBrainz {
 
   public searchArtist(artistName: string, score?: number): Observable<Artist[]> {
     return this.httpClient
-      .get<any>(`${MusicBrainz.API_ROOT}artist?query=name:${artistName}`)
+      .get<any>(`${MusicBrainz.API_ROOT}artist?query=name:${artistName}&limit=100`)
       .pipe(map(MusicBrainz.mapArtists))
       .pipe(
         map((artists: Artist[]) =>
@@ -65,9 +65,34 @@ export class MusicBrainz {
       .pipe(map(MusicBrainz.mapArtist));
   }
 
+  private fetchAllPages<T>(
+    urlBase: string,
+    mapFn: (raw: unknown) => T[],
+    limit = 100,
+    countKey = 'count',
+    offsetKey = 'offset'
+  ): Observable<T[]> {
+    const loadPage = (offset: number, acc: T[] = []): Observable<T[]> =>
+      this.httpClient.get<any>(`${urlBase}&limit=${limit}&offset=${offset}`).pipe(
+        mergeMap((res) => {
+          const newAcc = [...acc, ...mapFn(res)];
+          const fixedOffset = res[offsetKey] ?? offset;
+          if ((res[countKey] ?? 0) <= fixedOffset + limit) return of(newAcc);
+
+          return loadPage(fixedOffset + limit, newAcc);
+        })
+      );
+
+    return loadPage(0);
+  }
+
   public getAlbumsOfArtist(artistId: string): Observable<Album[]> {
-    return this.httpClient
-      .get<any>(`${MusicBrainz.API_ROOT}release-group?artist=${artistId}&type=album`)
-      .pipe(map(MusicBrainz.mapAlbums));
+    return this.fetchAllPages<Album>(
+      `${MusicBrainz.API_ROOT}release-group?artist=${artistId}&type=album`,
+      MusicBrainz.mapAlbums,
+      100,
+      'release-group-count',
+      'release-group-offset'
+    );
   }
 }
