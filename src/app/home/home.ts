@@ -9,6 +9,7 @@ import { InputTextModule } from 'primeng/inputtext';
 import { ArtistList } from '../artist-list/artist-list';
 import { Artist } from '../music-brainz/artist';
 import { MusicBrainz } from '../music-brainz/music-brainz';
+import { InputNumber } from 'primeng/inputnumber';
 @Component({
   selector: 'app-home',
   imports: [
@@ -21,19 +22,20 @@ import { MusicBrainz } from '../music-brainz/music-brainz';
     FloatLabel,
     ButtonModule,
     FieldsetModule,
+    InputNumber,
   ],
   templateUrl: './home.html',
   styleUrl: './home.scss',
 })
 export class Home {
   musicBrainzService = inject(MusicBrainz);
-  artistForm = new FormGroup({ name: new FormControl('') });
+  artistForm = new FormGroup({ name: new FormControl(''), score: new FormControl(70) });
 
   result = signal<Artist[]>([]);
 
   public async search() {
     this.musicBrainzService
-      .searchArtist(this.artistForm.value.name ?? '')
+      .searchArtist(this.artistForm.value.name ?? '', this.artistForm.value.score ?? undefined)
       .forEach((result: Artist[]) => {
         this.result.set(result);
       });

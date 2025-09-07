@@ -1,11 +1,8 @@
 export interface Artist {
   id: string;
+  score?: number;
   name: string;
-  sortName: string;
-  gender: string;
-  area: string;
-  begin: string;
-  beginArea: string;
-  end: string;
-  endArea: string;
+  area?: string;
+  begin?: Date;
+  end?: Date;
 }

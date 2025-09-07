@@ -1,4 +1,7 @@
 <p>
   {{ artist()?.name }}
 </p>
+
+@if (albums().length){
 <app-album-list [value]="albums()"></app-album-list>
+}
