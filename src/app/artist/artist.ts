@@ -34,6 +34,8 @@ export class Artist {
   userStore = inject(UserStore);
   public async addArtist() {
     const artist = this.artist()!;
+    if (!artist) return;
+
     if (this.userStore.contains(artist.id)) {
       await this.userStore.remove(artist.id);
     } else {
@@ -42,7 +44,9 @@ export class Artist {
   }
 
   public rowSelectionIcon() {
-    const artist = this.artist()!;
+    const artist = this.artist();
+    if (!artist) return '';
+
     if (!this.userStore.contains(artist.id)) {
       return 'pi-plus';
     }

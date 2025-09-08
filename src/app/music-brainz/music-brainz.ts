@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
-import { concatMap, delay, from, map, mergeMap, Observable, of, toArray } from 'rxjs';
+import { catchError, concatMap, delay, from, map, mergeMap, Observable, of, toArray } from 'rxjs';
 import { Album } from './album';
 import { Artist } from './artist';
 
@@ -101,7 +101,12 @@ export class MusicBrainz {
 
   getAllAlbumsOfArtists(artists: Artist[]): Observable<Album[]> {
     return from(artists).pipe(
-      concatMap((artist) => this.getAlbumsOfArtist(artist).pipe(delay(250))),
+      concatMap((artist) =>
+        this.getAlbumsOfArtist(artist).pipe(
+          delay(250),
+          catchError(() => of([]))
+        )
+      ),
       toArray(),
       map((arrays) => arrays.flat()),
       map((array) =>
