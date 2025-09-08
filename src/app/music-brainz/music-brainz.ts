@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
-import { map, mergeMap, Observable, of } from 'rxjs';
+import { concatMap, delay, from, map, mergeMap, Observable, of, toArray } from 'rxjs';
 import { Album } from './album';
 import { Artist } from './artist';
 
@@ -31,9 +31,10 @@ export class MusicBrainz {
     return raw.artists?.map(MusicBrainz.mapArtist);
   }
 
-  private static mapAlbum(raw: any): Album {
+  private static mapAlbum(raw: any, artist: Artist): Album {
     return {
       id: raw.id,
+      artist,
       title: raw.title,
       firstReleaseDate: new Date(raw['first-release-date']),
       primaryType: raw['primary-type'],
@@ -41,9 +42,9 @@ export class MusicBrainz {
     };
   }
 
-  private static mapAlbums(raw: any): Album[] {
+  private static mapAlbums(raw: any, artist: Artist): Album[] {
     return raw['release-groups']
-      ?.map(MusicBrainz.mapAlbum)
+      ?.map((album: unknown) => MusicBrainz.mapAlbum(album, artist))
       .filter((album: Album) => album.primaryType === 'Album' && !album.secondaryTypes?.length)
       .sort((a1: Album, a2: Album) => a1.firstReleaseDate < a2.firstReleaseDate);
   }
@@ -54,7 +55,9 @@ export class MusicBrainz {
       .pipe(map(MusicBrainz.mapArtists))
       .pipe(
         map((artists: Artist[]) =>
-          artists.filter((artist: Artist) => !artist.score || !score || artist.score > score)
+          artists
+            .filter((artist: Artist) => !artist.score || !score || artist.score > score)
+            .sort((a, b) => a.name.localeCompare(b.name))
         )
       );
   }
@@ -86,13 +89,26 @@ export class MusicBrainz {
     return loadPage(0);
   }
 
-  public getAlbumsOfArtist(artistId: string): Observable<Album[]> {
+  public getAlbumsOfArtist(artist: Artist): Observable<Album[]> {
     return this.fetchAllPages<Album>(
-      `${MusicBrainz.API_ROOT}release-group?artist=${artistId}&type=album`,
-      MusicBrainz.mapAlbums,
+      `${MusicBrainz.API_ROOT}release-group?artist=${artist.id}&type=album`,
+      (album) => MusicBrainz.mapAlbums(album, artist),
       100,
       'release-group-count',
       'release-group-offset'
+    );
+  }
+
+  getAllAlbumsOfArtists(artists: Artist[]): Observable<Album[]> {
+    return from(artists).pipe(
+      concatMap((artist) => this.getAlbumsOfArtist(artist).pipe(delay(250))),
+      toArray(),
+      map((arrays) => arrays.flat()),
+      map((array) =>
+        array.sort(
+          (a1: Album, a2: Album) => a2.firstReleaseDate.getTime() - a1.firstReleaseDate.getTime()
+        )
+      )
     );
   }
 }

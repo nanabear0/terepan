@@ -10,4 +10,5 @@ import { TableModule } from 'primeng/table';
 })
 export class AlbumList {
   value = input<Album[]>([]);
+  showArtist = input<boolean>(false);
 }

@@ -1,6 +1,12 @@
 <div class="root">
   <h2>
     {{ artist()?.name }}
+    <p-button
+      icon="pi {{ rowSelectionIcon() }}"
+      (click)="addArtist()"
+      severity="secondary"
+      rounded
+    />
   </h2>
   <div class="table-container">
     @if (albums().length){

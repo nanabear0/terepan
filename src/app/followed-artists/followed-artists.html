@@ -1,0 +1,8 @@
+<div class="root">
+  <h2>Followed Artists</h2>
+  <div class="table-container">
+    @if (artists().length){
+    <app-artist-list [value]="artists()"></app-artist-list>
+    }
+  </div>
+</div>

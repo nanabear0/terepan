@@ -5,10 +5,11 @@
       <th>Area</th>
       <th>Begin</th>
       <th>End</th>
+      <th></th>
     </tr>
   </ng-template>
-  <ng-template #body let-artist>
-    <tr>
+  <ng-template #body let-artist sel>
+    <tr [ngClass]="rowClass(artist)">
       <td>
         <a
           [routerLink]="['/artist', artist.id]"
@@ -20,6 +21,14 @@
       <td>{{ artist.area }}</td>
       <td>{{ artist.begin?.toLocaleDateString() }}</td>
       <td>{{ artist.end?.toLocaleDateString() }}</td>
+      <td>
+        <p-button
+          icon="pi {{ rowSelectionIcon(artist) }}"
+          (click)="addArtist(artist)"
+          severity="secondary"
+          rounded
+        />
+      </td>
     </tr>
   </ng-template>
 </p-table>

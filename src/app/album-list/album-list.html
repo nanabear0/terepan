@@ -1,12 +1,18 @@
 <p-table [value]="value()" [scrollable]="true" scrollHeight="flex">
   <ng-template #header>
     <tr>
+      @if (showArtist()) {
+      <th>Artist</th>
+      }
       <th>Title</th>
       <th>First release date</th>
     </tr>
   </ng-template>
   <ng-template #body let-album>
     <tr>
+      @if (showArtist()) {
+      <td>{{ album.artist?.name }}</td>
+      }
       <td>{{ album.title }}</td>
       <td>{{ album.firstReleaseDate.toLocaleDateString() }}</td>
     </tr>
