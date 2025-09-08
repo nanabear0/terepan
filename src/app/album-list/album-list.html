@@ -1,3 +1,5 @@
+<!-- eslint-disable @angular-eslint/template/click-events-have-key-events -->
+<!-- eslint-disable @angular-eslint/template/interactive-supports-focus -->
 <p-table [value]="value()" [scrollable]="true" scrollHeight="flex">
   <ng-template #header>
     <tr>
@@ -12,11 +14,32 @@
   <ng-template #body let-album>
     <tr>
       <td>
-        <img
-          [src]="'https://coverartarchive.org/release-group/' + album.id + '/front'"
-          [alt]="album.title"
-          class="imgPreview"
-        />
+        @if (hasImageYet(album.id)) {
+        <p-image
+          src="https://primefaces.org/cdn/primeng/images/galleria/galleria11.jpg"
+          [preview]="true"
+          alt="Image"
+          class="imgThumbnail"
+        >
+          <ng-template #indicator>
+            <i class="pi pi-search"></i>
+          </ng-template>
+          <ng-template #image>
+            <img [src]="getSrc(album.id)" [alt]="album.title" class="imgThumbnail" />
+          </ng-template>
+          <ng-template #preview let-style="style" let-previewCallback="previewCallback">
+            <img
+              [src]="'https://coverartarchive.org/release-group/' + album.id + '/front'"
+              [alt]="album.title"
+              class="imgPreview"
+              [style]="style"
+              (click)="previewCallback()"
+            />
+          </ng-template>
+        </p-image>
+        } @else {
+        <i class="pi pi-image" style="font-size: 64px"></i>
+        }
       </td>
       @if (showArtist()) {
 

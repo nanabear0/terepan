@@ -60,9 +60,7 @@ export class MusicBrainz {
       .pipe(map(MusicBrainz.mapArtists))
       .pipe(
         map((artists: Artist[]) =>
-          artists
-            .filter((artist: Artist) => !artist.score || !score || artist.score > score)
-            .sort((a, b) => a.name.localeCompare(b.name))
+          artists.filter((artist: Artist) => !artist.score || !score || artist.score > score)
         )
       );
   }
