@@ -38,7 +38,7 @@ export class LatestReleases {
     effect(() => {
       if (this.artists().length && !this.albums().length) {
         this.musicBrainz
-          .getAllAlbumsOfArtists([...this.artists()])
+          .getAlbumsOfArtists([...this.artists()])
           .subscribe((albums) => this.albums.set(albums));
       }
     });

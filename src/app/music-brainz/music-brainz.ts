@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
-import { catchError, concatMap, delay, from, map, mergeMap, Observable, of, toArray } from 'rxjs';
+import { map, mergeMap, Observable, of } from 'rxjs';
 import { Album } from './album';
 import { Artist } from './artist';
 
@@ -31,10 +31,10 @@ export class MusicBrainz {
     return raw.artists?.map(MusicBrainz.mapArtist);
   }
 
-  private static mapAlbum(raw: any, artist: Artist): Album {
+  private static mapAlbum(raw: any, artist?: Artist): Album {
     return {
       id: raw.id,
-      artist,
+      artist: artist ? artist.name : raw['artist-credit']?.[0]?.artist.name,
       title: raw.title,
       firstReleaseDate: new Date(raw['first-release-date']),
       primaryType: raw['primary-type'],
@@ -42,7 +42,7 @@ export class MusicBrainz {
     };
   }
 
-  private static mapAlbums(raw: any, artist: Artist): Album[] {
+  private static mapAlbums(raw: any, artist?: Artist): Album[] {
     return raw['release-groups']
       ?.map((album: unknown) => MusicBrainz.mapAlbum(album, artist))
       .filter((album: Album) => album.primaryType === 'Album' && !album.secondaryTypes?.length)
@@ -99,18 +99,16 @@ export class MusicBrainz {
     );
   }
 
-  getAllAlbumsOfArtists(artists: Artist[]): Observable<Album[]> {
-    return from(artists).pipe(
-      concatMap((artist) =>
-        this.getAlbumsOfArtist(artist).pipe(
-          delay(250),
-          catchError(() => of([]))
-        )
-      ),
-      toArray(),
-      map((arrays) => arrays.flat()),
-      map((array) =>
-        array.sort(
+  public getAlbumsOfArtists(artists: Artist[]): Observable<Album[]> {
+    const ids = artists.map(({ id }) => id);
+
+    return this.fetchAllPages<Album>(
+      `${MusicBrainz.API_ROOT}release-group?query=arid:(${ids.join(' OR ')})&type=album`,
+      (album) => MusicBrainz.mapAlbums(album),
+      100
+    ).pipe(
+      map((artists) =>
+        artists.sort(
           (a1: Album, a2: Album) => a2.firstReleaseDate.getTime() - a1.firstReleaseDate.getTime()
         )
       )

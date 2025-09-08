@@ -11,7 +11,7 @@
   <ng-template #body let-album>
     <tr>
       @if (showArtist()) {
-      <td>{{ album.artist?.name }}</td>
+      <td>{{ album.artist }}</td>
       }
       <td>{{ album.title }}</td>
       <td>{{ album.firstReleaseDate.toLocaleDateString() }}</td>
