@@ -34,7 +34,12 @@ export class MusicBrainz {
   private static mapAlbum(raw: any, artist?: Artist): Album {
     return {
       id: raw.id,
-      artist: artist ? artist.name : raw['artist-credit']?.[0]?.artist.name,
+      artist: artist
+        ? artist
+        : {
+            id: raw['artist-credit']?.[0]?.artist.id,
+            name: raw['artist-credit']?.[0]?.artist.name,
+          },
       title: raw.title,
       firstReleaseDate: new Date(raw['first-release-date']),
       primaryType: raw['primary-type'],

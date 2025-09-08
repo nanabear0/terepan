@@ -1,6 +1,7 @@
 <p-table [value]="value()" [scrollable]="true" scrollHeight="flex">
   <ng-template #header>
     <tr>
+      <th>Cover</th>
       @if (showArtist()) {
       <th>Artist</th>
       }
@@ -10,8 +11,23 @@
   </ng-template>
   <ng-template #body let-album>
     <tr>
+      <td>
+        <img
+          [src]="'https://coverartarchive.org/release-group/' + album.id + '/front'"
+          [alt]="album.title"
+          class="imgPreview"
+        />
+      </td>
       @if (showArtist()) {
-      <td>{{ album.artist }}</td>
+
+      <td>
+        <a
+          [routerLink]="['/artist', album.artist.id]"
+          routerLinkActive="active"
+          ariaCurrentWhenActive="page"
+          >{{ album.artist.name }}</a
+        >
+      </td>
       }
       <td>{{ album.title }}</td>
       <td>{{ album.firstReleaseDate.toLocaleDateString() }}</td>

@@ -1,7 +1,9 @@
+import { Artist } from './artist';
+
 export interface Album {
   id: string;
   firstReleaseDate: Date;
-  artist?: string;
+  artist?: Pick<Artist, 'id' | 'name'>;
   title: string;
   primaryType: string;
   secondaryTypes: string[];
