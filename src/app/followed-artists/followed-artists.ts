@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, computed, inject } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
 import { FieldsetModule } from 'primeng/fieldset';
@@ -28,4 +28,7 @@ export class FollowedArtists {
   userStoreReady = this.userStore.ready;
 
   artists = this.userStore.artists;
+  sortedArtists = computed(() =>
+    this.userStore.artists().sort((a, b) => a.name.localeCompare(b.name))
+  );
 }
