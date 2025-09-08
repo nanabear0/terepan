@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
-import { map, mergeMap, Observable, of } from 'rxjs';
+import { delay, map, mergeMap, Observable, of } from 'rxjs';
 import { Album } from './album';
 import { Artist } from './artist';
 
@@ -80,6 +80,7 @@ export class MusicBrainz {
   ): Observable<T[]> {
     const loadPage = (offset: number, acc: T[] = []): Observable<T[]> =>
       this.httpClient.get<any>(`${urlBase}&limit=${limit}&offset=${offset}`).pipe(
+        delay(400),
         mergeMap((res) => {
           const newAcc = [...acc, ...mapFn(res)];
           const fixedOffset = res[offsetKey] ?? offset;

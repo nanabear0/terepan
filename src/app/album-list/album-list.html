@@ -1,6 +1,17 @@
 <!-- eslint-disable @angular-eslint/template/click-events-have-key-events -->
 <!-- eslint-disable @angular-eslint/template/interactive-supports-focus -->
-<p-table [value]="value()" [scrollable]="true" scrollHeight="flex">
+<p-table
+  [value]="value()"
+  [scrollable]="true"
+  scrollHeight="flex"
+  [paginator]="true"
+  [rows]="rows"
+  [first]="first"
+  [showCurrentPageReport]="true"
+  currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+  (onPage)="pageChange($event)"
+  [rowsPerPageOptions]="[10, 25, 50]"
+>
   <ng-template #header>
     <tr>
       <th>Cover</th>
@@ -14,7 +25,7 @@
   <ng-template #body let-album>
     <tr>
       <td>
-        @if (hasImageYet(album.id)) {
+        @if (thumbnailStore.contains(album.id)) {
         <p-image
           src="https://primefaces.org/cdn/primeng/images/galleria/galleria11.jpg"
           [preview]="true"
@@ -25,7 +36,7 @@
             <i class="pi pi-search"></i>
           </ng-template>
           <ng-template #image>
-            <img [src]="getSrc(album.id)" [alt]="album.title" class="imgThumbnail" />
+            <img [src]="thumbnailStore.get(album.id)" [alt]="album.title" class="imgThumbnail" />
           </ng-template>
           <ng-template #preview let-style="style" let-previewCallback="previewCallback">
             <img
@@ -42,7 +53,6 @@
         }
       </td>
       @if (showArtist()) {
-
       <td>
         <a
           [routerLink]="['/artist', album.artist.id]"

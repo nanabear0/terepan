@@ -1,4 +1,15 @@
-<p-table [value]="value()" [scrollable]="true" scrollHeight="flex">
+<p-table
+  [value]="value()"
+  [scrollable]="true"
+  scrollHeight="flex"
+  [paginator]="true"
+  [rows]="rows"
+  [first]="first"
+  [showCurrentPageReport]="true"
+  currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+  (onPage)="pageChange($event)"
+  [rowsPerPageOptions]="[10, 25, 50]"
+>
   <ng-template #header>
     <tr>
       <th>Name</th>

@@ -2,7 +2,7 @@ import { ChangeDetectorRef, Component, inject, input } from '@angular/core';
 
 import { Artist } from '../music-brainz/artist';
 import { RouterLink } from '@angular/router';
-import { TableModule } from 'primeng/table';
+import { TableModule, TablePageEvent } from 'primeng/table';
 import { UserStore } from '../user-store/user-store';
 import { ButtonModule } from 'primeng/button';
 import { CommonModule } from '@angular/common';
@@ -41,5 +41,12 @@ export class ArtistList {
       return 'selectedArtist';
     }
     return null;
+  }
+
+  first = 0;
+  rows = 10;
+  pageChange(event: TablePageEvent) {
+    this.first = event.first;
+    this.rows = event.rows;
   }
 }

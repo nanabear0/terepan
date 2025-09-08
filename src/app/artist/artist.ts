@@ -23,9 +23,9 @@ export class Artist {
 
   constructor() {
     this.artistId = this.route.snapshot.paramMap.get('id')!;
-    this.musicBrainzService.getArtist(this.artistId).forEach((value: Art) => {
+    this.musicBrainzService.getArtist(this.artistId).subscribe((value: Art) => {
       this.artist.set(value);
-      this.musicBrainzService.getAlbumsOfArtist(value).forEach((value: Album[]) => {
+      this.musicBrainzService.getAlbumsOfArtist(value).subscribe((value: Album[]) => {
         this.albums.set(value);
       });
     });

@@ -1,48 +1,35 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, effect, inject, input, signal } from '@angular/core';
+import { Component, effect, inject, input } from '@angular/core';
 import { RouterLink } from '@angular/router';
+import { ButtonModule } from 'primeng/button';
 import { ImageModule } from 'primeng/image';
-import { TableModule } from 'primeng/table';
-import { map } from 'rxjs';
+import { TableModule, TablePageEvent } from 'primeng/table';
 import { Album } from '../music-brainz/album';
+import { ThumbnailStore } from '../thumbnail-store/thumbnail-store';
 
 @Component({
   selector: 'app-album-list',
-  imports: [TableModule, RouterLink, ImageModule],
+  imports: [TableModule, RouterLink, ImageModule, ButtonModule],
   templateUrl: './album-list.html',
   styleUrl: './album-list.scss',
 })
 export class AlbumList {
   value = input<Album[]>([]);
   showArtist = input<boolean>(false);
-  cache = signal<Map<string, string>>(new Map<string, string>());
   http = inject(HttpClient);
+  thumbnailStore = inject(ThumbnailStore);
 
-  constructor() {
-    effect(() => {
-      this.value().forEach(({ id }) => {
-        this.http
-          .get('https://coverartarchive.org/release-group/' + id)
-          .pipe(
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            map((r: any) => {
-              return r.images[0].thumbnails.small;
-            })
-          )
-          .subscribe((url: string) => {
-            this.cache.update((oldCache: Map<string, string>) => {
-              oldCache.set(id, url);
-              return new Map(oldCache);
-            });
-          });
-      });
-    });
-  }
-  hasImageYet(id: string) {
-    return this.cache().has(id);
-  }
+  effectRef = effect(() => {
+    if (this.thumbnailStore.ready()) {
+      this.thumbnailStore.updateStoreForRelease(this.value());
+      this.effectRef.destroy();
+    }
+  });
 
-  getSrc(id: string) {
-    return this.cache().get(id);
+  first = 0;
+  rows = 10;
+  pageChange(event: TablePageEvent) {
+    this.first = event.first;
+    this.rows = event.rows;
   }
 }
