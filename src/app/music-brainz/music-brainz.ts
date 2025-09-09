@@ -1,7 +1,18 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
-import { delay, map, mergeMap, Observable, of } from 'rxjs';
+import {
+  delay,
+  delayWhen,
+  map,
+  mergeMap,
+  mergeScan,
+  Observable,
+  of,
+  retryWhen,
+  takeWhile,
+  timer,
+} from 'rxjs';
 import { Album } from './album';
 import { Artist } from './artist';
 
@@ -80,16 +91,22 @@ export class MusicBrainz {
   ): Observable<T[]> {
     const loadPage = (offset: number, acc: T[] = []): Observable<T[]> =>
       this.httpClient.get<any>(`${urlBase}&limit=${limit}&offset=${offset}`).pipe(
-        delay(400),
+        delay(50),
+        retryWhen((err$) =>
+          err$.pipe(
+            mergeScan((attempt) => of(attempt + 1), 0),
+            delayWhen((attempt) => timer(50 * Math.pow(2, attempt - 1))),
+            takeWhile(() => true) // retry forever
+          )
+        ),
         mergeMap((res) => {
           const newAcc = [...acc, ...mapFn(res)];
           const fixedOffset = res[offsetKey] ?? offset;
-          if ((res[countKey] ?? 0) <= fixedOffset + limit) return of(newAcc);
-
-          return loadPage(fixedOffset + limit, newAcc);
+          return (res[countKey] ?? 0) <= fixedOffset + limit
+            ? of(newAcc)
+            : loadPage(fixedOffset + limit, newAcc);
         })
       );
-
     return loadPage(0);
   }
 
