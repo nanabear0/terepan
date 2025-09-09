@@ -2,7 +2,7 @@
   <h2>Followed Artists @if(artists().length) {({{ artists().length }})}</h2>
   <div class="table-container">
     @if (artists().length){
-    <app-artist-list [value]="sortedArtists()"></app-artist-list>
+    <app-artist-list [value]="sortedArtists()" [noHightlight]="true"></app-artist-list>
     }
   </div>
 </div>

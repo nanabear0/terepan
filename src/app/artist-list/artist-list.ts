@@ -1,23 +1,30 @@
-import { ChangeDetectorRef, Component, inject, input } from '@angular/core';
-
-import { Artist } from '../music-brainz/artist';
-import { RouterLink } from '@angular/router';
-import { TableModule, TablePageEvent } from 'primeng/table';
-import { UserStore } from '../user-store/user-store';
-import { ButtonModule } from 'primeng/button';
 import { CommonModule } from '@angular/common';
+import { ChangeDetectorRef, Component, inject, input, signal } from '@angular/core';
+import { RouterLink } from '@angular/router';
+import { ButtonModule } from 'primeng/button';
+import { DrawerModule } from 'primeng/drawer';
+import { TableModule, TablePageEvent } from 'primeng/table';
+import { Artist } from '../music-brainz/artist';
+import { UserStore } from '../user-store/user-store';
+import { Artist as ArtistComponent } from '../artist/artist';
+
 @Component({
   selector: 'app-artist-list',
-  imports: [RouterLink, TableModule, ButtonModule, CommonModule],
+  imports: [RouterLink, TableModule, ButtonModule, CommonModule, DrawerModule, ArtistComponent],
   templateUrl: './artist-list.html',
   styleUrl: './artist-list.scss',
 })
 export class ArtistList {
   value = input<Artist[]>([]);
+  noHightlight = input<boolean>(false);
   userStore = inject(UserStore);
   userStoreReady = this.userStore.ready;
   cd = inject(ChangeDetectorRef);
 
+  selectedArtist = signal<Artist | undefined>(undefined);
+  showDialog(id: Artist) {
+    this.selectedArtist.set(id);
+  }
   displayedColumns = ['name', 'sortName', 'gender', 'area', 'begin', 'beginArea', 'end', 'endArea'];
 
   public async addArtist(artist: Artist) {

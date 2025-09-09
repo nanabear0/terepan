@@ -20,7 +20,7 @@
     </tr>
   </ng-template>
   <ng-template #body let-artist sel>
-    <tr [ngClass]="rowClass(artist)">
+    <tr [ngClass]="!noHightlight() ? rowClass(artist) : undefined">
       <td>
         <a
           [routerLink]="['/artist', artist.id]"
@@ -28,6 +28,7 @@
           ariaCurrentWhenActive="page"
           >{{ artist.name }}</a
         >
+        <p-button link (click)="showDialog(artist)"><i class="pi pi-window-maximize"></i></p-button>
       </td>
       <td>{{ artist.area }}</td>
       <td>{{ artist.begin?.toLocaleDateString() }}</td>
@@ -43,3 +44,15 @@
     </tr>
   </ng-template>
 </p-table>
+<p-drawer
+  [visible]="!!selectedArtist()"
+  (onHide)="selectedArtist.set(undefined)"
+  position="bottom"
+  [style]="{ height: '80vh', padding: '24px' }"
+>
+  <ng-template #headless>
+    @if (!!selectedArtist()) {
+    <app-artist [value]="selectedArtist()?.id!" class="artist"></app-artist>
+    }
+  </ng-template>
+</p-drawer>

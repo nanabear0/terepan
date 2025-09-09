@@ -1,4 +1,4 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, effect, inject, input, signal } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { AlbumList } from '../album-list/album-list';
 import { Album } from '../music-brainz/album';
@@ -14,19 +14,21 @@ import { UserStore } from '../user-store/user-store';
   styleUrl: './artist.scss',
 })
 export class Artist {
-  readonly artistId: string;
   private route = inject(ActivatedRoute);
+  value = input('');
   musicBrainzService = inject(MusicBrainz);
 
   artist = signal<Art | undefined>(undefined);
   albums = signal<Album[]>([]);
 
   constructor() {
-    this.artistId = this.route.snapshot.paramMap.get('id')!;
-    this.musicBrainzService.getArtist(this.artistId).subscribe((value: Art) => {
-      this.artist.set(value);
-      this.musicBrainzService.getAlbumsOfArtist(value).subscribe((value: Album[]) => {
-        this.albums.set(value);
+    effect(() => {
+      const artistId = this.route.snapshot.paramMap.get('id') ?? this.value();
+      this.musicBrainzService.getArtist(artistId).subscribe((value: Art) => {
+        this.artist.set(value);
+        this.musicBrainzService.getAlbumsOfArtist(value).subscribe((value: Album[]) => {
+          this.albums.set(value);
+        });
       });
     });
   }
