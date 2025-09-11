@@ -24,27 +24,13 @@
       <td>
         @if (thumbnailStore.contains(album.id)) {
         <p-image
-          src="https://primefaces.org/cdn/primeng/images/galleria/galleria11.jpg"
+          [src]="thumbnailStore.get(album.id)"
           [preview]="true"
-          alt="Image"
+          [alt]="album.title"
           class="imgThumbnail"
-        >
-          <ng-template #indicator>
-            <i class="pi pi-search"></i>
-          </ng-template>
-          <ng-template #image>
-            <img [src]="thumbnailStore.get(album.id)" [alt]="album.title" class="imgThumbnail" />
-          </ng-template>
-          <ng-template #preview let-style="style" let-previewCallback="previewCallback">
-            <img
-              [src]="'https://coverartarchive.org/release-group/' + album.id + '/front'"
-              [alt]="album.title"
-              class="imgPreview"
-              [style]="style"
-              (click)="previewCallback()"
-            />
-          </ng-template>
-        </p-image>
+          appendTo="body"
+          [previewImageSrc]="'https://coverartarchive.org/release-group/' + album.id + '/front'"
+        />
         } @else {
         <i class="pi pi-image" style="font-size: 64px"></i>
         }

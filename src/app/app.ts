@@ -29,12 +29,12 @@ export class App {
       label: 'Followed Artists',
     },
     {
-      routerLink: '/search',
-      label: 'Search',
-    },
-    {
       routerLink: '/latest-releases',
       label: 'Latest Releases',
+    },
+    {
+      routerLink: '/search',
+      label: 'Search',
     },
     {
       routerLink: '/import',
