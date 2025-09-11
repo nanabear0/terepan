@@ -9,7 +9,8 @@
     "test": "ng test",
     "lint": "ng lint",
     "github-build": "ng build --configuration production --base-href 'https://nanabear0.github.io/terepan/'",
-    "github-deploy": "npx angular-cli-ghpages --dir=dist/terepan/browser --no-silent"
+    "github-deploy": "npx angular-cli-ghpages --dir=dist/terepan/browser --no-silent",
+    "golive": "pnpm run github-build && pnpm run github-deploy"
   },
   "prettier": {
     "printWidth": 100,
