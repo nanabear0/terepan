@@ -8,7 +8,7 @@ import { InputTextModule } from 'primeng/inputtext';
 import { AlbumList } from '../album-list/album-list';
 import { Album } from '../music-brainz/album';
 import { MusicBrainz } from '../music-brainz/music-brainz';
-import { UserStore } from '../user-store/user-store';
+import { FollowedArtistsStore } from '../stores/followed-artists-store';
 import { ProgressSpinner } from 'primeng/progressspinner';
 
 @Component({
@@ -28,7 +28,7 @@ import { ProgressSpinner } from 'primeng/progressspinner';
   styleUrl: './latest-releases.scss',
 })
 export class LatestReleases {
-  userStore = inject(UserStore);
+  userStore = inject(FollowedArtistsStore);
   musicBrainz = inject(MusicBrainz);
   userStoreReady = this.userStore.ready;
   artists = this.userStore.artists;

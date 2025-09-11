@@ -5,7 +5,7 @@ import { Album } from '../music-brainz/album';
 import { Artist as Art } from '../music-brainz/artist';
 import { MusicBrainz } from '../music-brainz/music-brainz';
 import { ButtonModule } from 'primeng/button';
-import { UserStore } from '../user-store/user-store';
+import { FollowedArtistsStore } from '../stores/followed-artists-store';
 
 @Component({
   selector: 'app-artist',
@@ -33,7 +33,7 @@ export class Artist {
     });
   }
 
-  userStore = inject(UserStore);
+  userStore = inject(FollowedArtistsStore);
   public async addArtist() {
     const artist = this.artist()!;
     if (!artist) return;

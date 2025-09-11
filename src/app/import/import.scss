@@ -1,0 +1,25 @@
+.root {
+  display: grid;
+  grid-template-rows: min-content 1fr;
+  max-height: 100%;
+  gap: 12px;
+}
+.textarea {
+  width: 100%;
+}
+.input-fields {
+  display: grid;
+  gap: 12px;
+  grid-template-columns: 1fr;
+  grid-template-rows: 128px;
+  grid-auto-rows: auto;
+  .actions {
+    display: flex;
+    flex-direction: row;
+    gap: 12px;
+  }
+}
+.table-container {
+  min-height: 0;
+  max-height: 100%;
+}

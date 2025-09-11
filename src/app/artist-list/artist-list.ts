@@ -5,7 +5,7 @@ import { ButtonModule } from 'primeng/button';
 import { DrawerModule } from 'primeng/drawer';
 import { TableModule, TablePageEvent } from 'primeng/table';
 import { Artist } from '../music-brainz/artist';
-import { UserStore } from '../user-store/user-store';
+import { FollowedArtistsStore } from '../stores/followed-artists-store';
 import { Artist as ArtistComponent } from '../artist/artist';
 
 @Component({
@@ -17,7 +17,8 @@ import { Artist as ArtistComponent } from '../artist/artist';
 export class ArtistList {
   value = input<Artist[]>([]);
   noHightlight = input<boolean>(false);
-  userStore = inject(UserStore);
+  noAction = input<boolean>(false);
+  userStore = inject(FollowedArtistsStore);
   userStoreReady = this.userStore.ready;
   cd = inject(ChangeDetectorRef);
 

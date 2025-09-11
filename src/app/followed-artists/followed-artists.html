@@ -1,8 +1,10 @@
 <div class="root">
-  <h2>Followed Artists @if(artists().length) {({{ artists().length }})}</h2>
-  <div class="table-container">
+  <p-fieldset
+    [legend]="`Followed Artists (${artists().length})`"
+    class="table-container heightFixedFieldset"
+  >
     @if (artists().length){
     <app-artist-list [value]="sortedArtists()" [noHightlight]="true"></app-artist-list>
     }
-  </div>
+  </p-fieldset>
 </div>

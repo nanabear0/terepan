@@ -1,4 +1,22 @@
-@import "primeicons/primeicons.css";
+@import 'primeicons/primeicons.css';
 
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+html,
+body {
+  height: 100%;
+}
+body {
+  margin: 0;
+  font-family: Roboto, 'Helvetica Neue', sans-serif;
+}
+
+.heightFixedFieldset {
+  .p-fieldset {
+    height: 100%;
+    .p-fieldset-content-container {
+      height: 100%;
+      .p-fieldset-content {
+        height: 100%;
+      }
+    }
+  }
+}

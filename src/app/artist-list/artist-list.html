@@ -16,7 +16,9 @@
       <th>Area</th>
       <th>Begin</th>
       <th>End</th>
+      @if(!noAction()) {
       <th></th>
+      }
     </tr>
   </ng-template>
   <ng-template #body let-artist sel>
@@ -33,6 +35,7 @@
       <td>{{ artist.area }}</td>
       <td>{{ artist.begin?.toLocaleDateString() }}</td>
       <td>{{ artist.end?.toLocaleDateString() }}</td>
+      @if(!noAction()) {
       <td>
         <p-button
           icon="pi {{ rowSelectionIcon(artist) }}"
@@ -41,6 +44,7 @@
           rounded
         />
       </td>
+      }
     </tr>
   </ng-template>
 </p-table>

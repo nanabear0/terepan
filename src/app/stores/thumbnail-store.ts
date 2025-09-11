@@ -1,56 +1,57 @@
 import { HttpClient } from '@angular/common/http';
-import { inject, Injectable, signal } from '@angular/core';
-import { IDBPDatabase, openDB } from 'idb';
+import { effect, inject, Injectable, signal } from '@angular/core';
 import { map } from 'rxjs';
+import * as yup from 'yup';
 import { Album } from '../music-brainz/album';
-
-interface KeyValuePair {
-  key: string;
-  value: string;
-}
 
 @Injectable({ providedIn: 'root' })
 export class ThumbnailStore {
-  private db!: IDBPDatabase;
-  private readonly DB_NAME = 'thumbnailStore';
-  private readonly STORE_NAME = 'thumbnails';
-  private cache = signal(new Map<string, KeyValuePair>());
+  private localStorageKey = 'thumbnails';
+  private cache = signal(new Map<string, string>());
   public ready = signal(false);
 
   constructor() {
-    this.initDB().then(() => {
-      this.loadCache().then(() => this.ready.set(true));
+    this.loadCache().then(() => this.ready.set(true));
+    effect(() => {
+      localStorage.setItem(
+        this.localStorageKey,
+        JSON.stringify(
+          Array.from(this.cache().entries()).reduce((pv, [k, v]) => ({ ...pv, [k]: v }), {})
+        )
+      );
     });
   }
 
-  private async initDB() {
-    this.db = await openDB(this.DB_NAME, 1, {
-      upgrade(db) {
-        if (!db.objectStoreNames.contains('thumbnails')) {
-          db.createObjectStore('thumbnails');
+  public async parseThumbnailMap(str: string): Promise<Map<string, string> | null> {
+    const map = new Map<string, string>();
+    try {
+      const parsedJSON = JSON.parse(str ?? '');
+      for (const releaseGroupId in parsedJSON) {
+        if (Object.prototype.hasOwnProperty.call(parsedJSON, releaseGroupId)) {
+          const url = await yup.string().cast(parsedJSON[releaseGroupId]);
+          if (url) map.set(releaseGroupId, url);
         }
-      },
-    });
+      }
+      return map;
+    } catch (e: unknown) {
+      console.error(e);
+      return null;
+    }
   }
 
   private async loadCache() {
-    const all = await this.db.getAll(this.STORE_NAME);
-    console.log(all);
-    const newCache = new Map<string, KeyValuePair>();
-    all.forEach((value: KeyValuePair) => newCache.set(value.key, value));
-    this.cache.set(newCache);
+    const newCache = await this.parseThumbnailMap(localStorage.getItem(this.localStorageKey) ?? '');
+    this.cache.set(newCache ?? new Map());
   }
 
   async add(id: string, thumbnail: string) {
-    await this.db.put(this.STORE_NAME, { key: id, value: thumbnail }, id);
     this.cache.update((oldCache) => {
-      oldCache.set(id, { key: id, value: thumbnail });
+      oldCache.set(id, thumbnail);
       return new Map(oldCache);
     });
   }
 
   async remove(id: string) {
-    await this.db.delete(this.STORE_NAME, id);
     this.cache.update((oldCache) => {
       oldCache.delete(id);
       return new Map(oldCache);
@@ -58,7 +59,7 @@ export class ThumbnailStore {
   }
 
   get(id: string): string | undefined {
-    return this.cache().get(id)?.value;
+    return this.cache().get(id);
   }
 
   contains(id: string): boolean {
@@ -66,7 +67,6 @@ export class ThumbnailStore {
   }
 
   async clearAll() {
-    await this.db.clear(this.STORE_NAME);
     this.cache.set(new Map());
   }
 

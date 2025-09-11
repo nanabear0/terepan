@@ -1,1 +1,15 @@
-<h2>Coming coon</h2>
+<div class="root">
+  <p-fieldset legend="Export">
+    <div class="input-fields">
+      <textarea pTextarea id="input" [ngModel]="exportedValue()" class="textarea"></textarea>
+      <div class="actions">
+        <p-button label="Export" (onClick)="export()" />
+        @if(exportedValue()) {
+        <button pButton (click)="saveToFile()">
+          <i class="pi pi-download" pButtonIcon></i>
+          <span pButtonLabel>Save to file</span></button
+        >}
+      </div>
+    </div>
+  </p-fieldset>
+</div>

@@ -6,7 +6,7 @@ import { InputGroupModule } from 'primeng/inputgroup';
 import { InputGroupAddonModule } from 'primeng/inputgroupaddon';
 import { InputTextModule } from 'primeng/inputtext';
 import { ArtistList } from '../artist-list/artist-list';
-import { UserStore } from '../user-store/user-store';
+import { FollowedArtistsStore } from '../stores/followed-artists-store';
 
 @Component({
   selector: 'app-followed-artists',
@@ -24,7 +24,7 @@ import { UserStore } from '../user-store/user-store';
   styleUrl: './followed-artists.scss',
 })
 export class FollowedArtists {
-  userStore = inject(UserStore);
+  userStore = inject(FollowedArtistsStore);
   userStoreReady = this.userStore.ready;
 
   artists = this.userStore.artists;

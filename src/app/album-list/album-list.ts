@@ -5,7 +5,7 @@ import { ButtonModule } from 'primeng/button';
 import { ImageModule } from 'primeng/image';
 import { TableModule, TablePageEvent } from 'primeng/table';
 import { Album } from '../music-brainz/album';
-import { ThumbnailStore } from '../thumbnail-store/thumbnail-store';
+import { ThumbnailStore } from '../stores/thumbnail-store';
 
 @Component({
   selector: 'app-album-list',
