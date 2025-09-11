@@ -27,9 +27,12 @@
       <p-button label="Submit" type="submit" class="button" />
     </form>
   </p-fieldset>
-  <div class="table-container">
-    @if (result().length){
+  @if (result().length){
+  <p-fieldset
+    [legend]="`${result().length} artists match`"
+    class="table-container heightFixedFieldset"
+  >
     <app-artist-list [value]="result()"></app-artist-list>
-    }
-  </div>
+  </p-fieldset>
+  }
 </div>

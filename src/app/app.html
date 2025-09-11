@@ -2,11 +2,11 @@
   <p-toolbar>
     <ng-template #start>
       <div class="pageLinks">
-        <a routerLink="/" pButton>
-          <span pButtonLabel>Home</span>
-        </a>
         <a routerLink="/followed-artists" pButton>
           <span pButtonLabel>Followed Artists</span>
+        </a>
+        <a routerLink="/search" pButton>
+          <span pButtonLabel>Search</span>
         </a>
         <a routerLink="/latest-releases" pButton>
           <span pButtonLabel>Latest Releases</span>
@@ -18,6 +18,17 @@
           <span pButtonLabel>Export</span>
         </a>
       </div>
+    </ng-template>
+    <ng-template #end>
+      <p-avatar
+        image="./assets/terepanandkakki.png"
+        [style]="{
+          width: '48px',
+          height: '48px',
+          'border-radius': '48px',
+          overflow: 'hidden'
+        }"
+      />
     </ng-template>
   </p-toolbar>
   <div class="content">

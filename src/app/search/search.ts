@@ -24,10 +24,10 @@ import { InputNumber } from 'primeng/inputnumber';
     FieldsetModule,
     InputNumber,
   ],
-  templateUrl: './home.html',
-  styleUrl: './home.scss',
+  templateUrl: './search.html',
+  styleUrl: './search.scss',
 })
-export class Home {
+export class Search {
   musicBrainzService = inject(MusicBrainz);
   artistForm = new FormGroup({ name: new FormControl(''), score: new FormControl(70) });
 

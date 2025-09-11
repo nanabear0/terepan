@@ -1,10 +1,9 @@
 <div class="root">
-  <h2>Latest Releases</h2>
-  <div class="table-container">
+  <p-fieldset legend="Latest Releases" class="table-container heightFixedFieldset">
     @if (albums().length){
     <app-album-list [value]="albums()" [showArtist]="true"></app-album-list>
     } @else if (artists().length > 0) {
     <p-progress-spinner ariaLabel="loading" class="spinner" />
     }
-  </div>
+  </p-fieldset>
 </div>
