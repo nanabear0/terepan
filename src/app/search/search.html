@@ -1,5 +1,5 @@
 <div class="root">
-  <p-fieldset legend="Search Artist">
+  <p-fieldset legend="Search Artist" [toggleable]="true">
     <form class="input-fields" [formGroup]="artistForm" (ngSubmit)="search()">
       <p-inputgroup>
         <p-inputgroup-addon>
