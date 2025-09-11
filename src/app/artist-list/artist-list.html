@@ -2,13 +2,10 @@
   [value]="value()"
   [scrollable]="true"
   scrollHeight="flex"
-  [paginator]="true"
-  [rows]="rows"
-  [first]="first"
-  [showCurrentPageReport]="true"
-  currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
-  (onPage)="pageChange($event)"
-  [rowsPerPageOptions]="[10, 25, 50]"
+  [value]="value()"
+  [scrollable]="true"
+  [virtualScroll]="true"
+  [virtualScrollItemSize]="62"
 >
   <ng-template #header>
     <tr>

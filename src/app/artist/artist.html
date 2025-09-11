@@ -8,9 +8,7 @@
       [outlined]="true"
     />
   </h2>
-  <div class="table-container">
-    @if (albums().length){
+  <p-fieldset legend="Studio albums" class="table-container heightFixedFieldset">
     <app-album-list [value]="albums()"></app-album-list>
-    }
-  </div>
+  </p-fieldset>
 </div>

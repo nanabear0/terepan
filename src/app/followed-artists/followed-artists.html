@@ -3,8 +3,6 @@
     [legend]="`Followed Artists (${artists().length})`"
     class="table-container heightFixedFieldset"
   >
-    @if (artists().length){
     <app-artist-list [value]="sortedArtists()" [noHightlight]="true"></app-artist-list>
-    }
   </p-fieldset>
 </div>

@@ -7,6 +7,7 @@ import { InputGroupAddonModule } from 'primeng/inputgroupaddon';
 import { InputTextModule } from 'primeng/inputtext';
 import { ArtistList } from '../artist-list/artist-list';
 import { FollowedArtistsStore } from '../stores/followed-artists-store';
+import { ProgressSpinner } from 'primeng/progressspinner';
 
 @Component({
   selector: 'app-followed-artists',
@@ -19,6 +20,7 @@ import { FollowedArtistsStore } from '../stores/followed-artists-store';
     InputTextModule,
     ButtonModule,
     FieldsetModule,
+    ProgressSpinner,
   ],
   templateUrl: './followed-artists.html',
   styleUrl: './followed-artists.scss',

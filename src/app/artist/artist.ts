@@ -6,10 +6,11 @@ import { Artist as Art } from '../music-brainz/artist';
 import { MusicBrainz } from '../music-brainz/music-brainz';
 import { ButtonModule } from 'primeng/button';
 import { FollowedArtistsStore } from '../stores/followed-artists-store';
+import { Fieldset } from 'primeng/fieldset';
 
 @Component({
   selector: 'app-artist',
-  imports: [AlbumList, ButtonModule],
+  imports: [AlbumList, ButtonModule, Fieldset],
   templateUrl: './artist.html',
   styleUrl: './artist.scss',
 })
