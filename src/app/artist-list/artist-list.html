@@ -27,7 +27,9 @@
           ariaCurrentWhenActive="page"
           >{{ artist.name }}</a
         >
-        <p-button link (click)="showDialog(artist)"><i class="pi pi-window-maximize"></i></p-button>
+        <p-button link (click)="showDialog(artist)" class="artistPopupButton"
+          ><i class="pi pi-window-maximize"></i
+        ></p-button>
       </td>
       <td>{{ artist.area }}</td>
       <td>{{ artist.begin?.toLocaleDateString() }}</td>

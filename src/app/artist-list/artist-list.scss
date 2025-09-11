@@ -9,3 +9,8 @@
 .artist {
   height: 100%;
 }
+.artistPopupButton {
+  @media (max-width: 640px) {
+    display: none;
+  }
+}

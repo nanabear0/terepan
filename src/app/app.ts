@@ -1,20 +1,21 @@
 import { Component, inject, signal } from '@angular/core';
 import { Router, RouterModule, RouterOutlet } from '@angular/router';
+import { MenuItem } from 'primeng/api';
+import { AvatarModule } from 'primeng/avatar';
 import { BreadcrumbModule } from 'primeng/breadcrumb';
 import { ButtonModule } from 'primeng/button';
+import { MenubarModule } from 'primeng/menubar';
 import { ScrollPanelModule } from 'primeng/scrollpanel';
-import { Toolbar } from 'primeng/toolbar';
-import { AvatarModule } from 'primeng/avatar';
 @Component({
   selector: 'app-root',
   imports: [
     RouterOutlet,
     ScrollPanelModule,
-    Toolbar,
     ButtonModule,
     RouterModule,
     BreadcrumbModule,
     AvatarModule,
+    MenubarModule,
   ],
   templateUrl: './app.html',
   styleUrl: './app.scss',
@@ -22,4 +23,26 @@ import { AvatarModule } from 'primeng/avatar';
 export class App {
   protected readonly title = signal('terepan');
   router = inject(Router);
+  menubarItems: MenuItem[] = [
+    {
+      routerLink: '/followed-artists',
+      label: 'Followed Artists',
+    },
+    {
+      routerLink: '/search',
+      label: 'Search',
+    },
+    {
+      routerLink: '/latest-releases',
+      label: 'Latest Releases',
+    },
+    {
+      routerLink: '/import',
+      label: 'Import',
+    },
+    {
+      routerLink: '/export',
+      label: 'Export',
+    },
+  ];
 }

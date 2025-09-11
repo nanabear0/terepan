@@ -1,6 +1,6 @@
 <div class="app-root">
-  <p-toolbar>
-    <ng-template #start>
+  <p-menubar [model]="menubarItems">
+    <!-- <ng-template #start>
       <div class="pageLinks">
         <a routerLink="/followed-artists" pButton>
           <span pButtonLabel>Followed Artists</span>
@@ -18,19 +18,19 @@
           <span pButtonLabel>Export</span>
         </a>
       </div>
-    </ng-template>
+    </ng-template> -->
     <ng-template #end>
       <p-avatar
         image="./assets/terepanandkakki.png"
         [style]="{
-          width: '48px',
-          height: '48px',
-          'border-radius': '48px',
+          width: '32px',
+          height: '32px',
+          'border-radius': '32px',
           overflow: 'hidden'
         }"
       />
     </ng-template>
-  </p-toolbar>
+  </p-menubar>
   <div class="content">
     <router-outlet />
   </div>
