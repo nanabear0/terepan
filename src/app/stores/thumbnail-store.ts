@@ -73,14 +73,13 @@ export class ThumbnailStore {
   http = inject(HttpClient);
   updateQueue = signal<Set<string>>(new Set());
   queueAlbumsForThumbnailUpdate(albums: Album[]) {
-    if (this.ready()) {
-      this.updateQueue.update(
-        (oldQueue) => new Set([...oldQueue, ...albums.map((album) => album.id)])
-      );
-    }
+    this.updateQueue.update(
+      (oldQueue) => new Set([...oldQueue, ...albums.map((album) => album.id)])
+    );
   }
 
   updateThumbnailStore = effect(async () => {
+    if (!this.ready()) return;
     const updateQueue = this.updateQueue();
     const first = updateQueue.values().next().value;
     if (!first) return;
