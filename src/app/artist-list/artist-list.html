@@ -6,13 +6,15 @@
   [scrollable]="true"
   [virtualScroll]="true"
   [virtualScrollItemSize]="62"
-  sortField="score"
-  [sortOrder]="-1"
+  [sortField]="noScore() ? 'name' : 'score'"
+  [sortOrder]="noScore() ? 1 : -1"
   dataKey="id"
 >
   <ng-template #header>
     <tr>
+      @if (!noScore()) {
       <th pSortableColumn="score">Match <p-sortIcon field="score" /></th>
+      }
       <th pSortableColumn="name">Name <p-sortIcon field="name" /></th>
       <th pSortableColumn="area">Area <p-sortIcon field="area" /></th>
       <th pSortableColumn="begin">Begin <p-sortIcon field="begin" /></th>
@@ -24,7 +26,9 @@
   </ng-template>
   <ng-template #body let-artist sel>
     <tr [ngClass]="!noHightlight() ? rowClass(artist) : undefined">
+      @if (!noScore()) {
       <td>{{ artist.score }}</td>
+      }
       <td>
         <a
           [routerLink]="['/artist', artist.id]"
