@@ -22,7 +22,11 @@
     legend="Following artists will be imported"
     class="table-container heightFixedFieldset"
   >
-    <app-artist-list [value]="parsedArtistsAsList()" [noAction]="true"></app-artist-list>
+    <app-artist-list
+      [value]="parsedArtistsAsList()"
+      [noAction]="true"
+      [noScore]="true"
+    ></app-artist-list>
   </p-fieldset>
   }
 </div>

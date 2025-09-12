@@ -16,6 +16,7 @@ import { Artist as ArtistComponent } from '../artist/artist';
 })
 export class ArtistList {
   value = input<Artist[]>([]);
+  noScore = input<boolean>(false);
   noHightlight = input<boolean>(false);
   noAction = input<boolean>(false);
   userStore = inject(FollowedArtistsStore);

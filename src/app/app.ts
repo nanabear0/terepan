@@ -1,4 +1,4 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, computed, inject, signal } from '@angular/core';
 import { Router, RouterModule, RouterOutlet } from '@angular/router';
 import { MenuItem } from 'primeng/api';
 import { AvatarModule } from 'primeng/avatar';
@@ -6,6 +6,8 @@ import { BreadcrumbModule } from 'primeng/breadcrumb';
 import { ButtonModule } from 'primeng/button';
 import { MenubarModule } from 'primeng/menubar';
 import { ScrollPanelModule } from 'primeng/scrollpanel';
+import { Message } from 'primeng/message';
+import { LatestReleasesStore } from './stores/latest-releases-store';
 @Component({
   selector: 'app-root',
   imports: [
@@ -16,6 +18,7 @@ import { ScrollPanelModule } from 'primeng/scrollpanel';
     BreadcrumbModule,
     AvatarModule,
     MenubarModule,
+    Message,
   ],
   templateUrl: './app.html',
   styleUrl: './app.scss',
@@ -45,4 +48,7 @@ export class App {
       label: 'Export',
     },
   ];
+
+  latestReleasesStore = inject(LatestReleasesStore);
+  latestReleasesUpdating = computed(() => this.latestReleasesStore.updatesInProgress() > 0);
 }

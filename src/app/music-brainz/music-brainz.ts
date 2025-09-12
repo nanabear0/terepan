@@ -127,12 +127,13 @@ export class MusicBrainz {
       `${MusicBrainz.API_ROOT}release-group?query=arid:(${ids.join(' OR ')})&type=album`,
       (album) => MusicBrainz.mapAlbums(album),
       100
-    ).pipe(
-      map((artists) =>
-        artists.sort(
-          (a1: Album, a2: Album) => a2.firstReleaseDate.getTime() - a1.firstReleaseDate.getTime()
-        )
-      )
     );
+    // .pipe(
+    //   map((artists) =>
+    //     artists.sort(
+    //       (a1: Album, a2: Album) => a2.firstReleaseDate.getTime() - a1.firstReleaseDate.getTime()
+    //     )
+    //   )
+    // );
   }
 }

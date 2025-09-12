@@ -12,6 +12,14 @@
       />
     </ng-template>
   </p-menubar>
+
+  <div class="messageGroup">
+    @if(latestReleasesUpdating()) {
+    <p-message severity="info" icon="pi pi-spin pi-spinner">
+      Latests releases are being updated</p-message
+    >
+    }
+  </div>
   <div class="content">
     <router-outlet />
   </div>

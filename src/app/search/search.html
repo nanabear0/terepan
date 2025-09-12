@@ -29,7 +29,7 @@
   </p-fieldset>
   @if (result().length){
   <p-fieldset
-    [legend]="`${result().length} artists match`"
+    [legend]="`Top ${result().length} matches`"
     class="table-container heightFixedFieldset"
   >
     <app-artist-list [value]="result()"></app-artist-list>

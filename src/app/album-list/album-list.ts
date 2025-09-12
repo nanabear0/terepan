@@ -6,10 +6,11 @@ import { ImageModule } from 'primeng/image';
 import { TableModule, TablePageEvent } from 'primeng/table';
 import { Album } from '../music-brainz/album';
 import { ThumbnailStore } from '../stores/thumbnail-store';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-album-list',
-  imports: [TableModule, RouterLink, ImageModule, ButtonModule],
+  imports: [TableModule, RouterLink, ImageModule, ButtonModule, CommonModule],
   templateUrl: './album-list.html',
   styleUrl: './album-list.scss',
 })
@@ -20,9 +21,7 @@ export class AlbumList {
   thumbnailStore = inject(ThumbnailStore);
 
   thumbnailUpdateEffect = effect(() => {
-    if (this.thumbnailStore.ready()) {
-      this.thumbnailStore.updateStoreForRelease(this.value());
-    }
+    this.thumbnailStore.queueAlbumsForThumbnailUpdate(this.value());
   });
 
   first = 0;

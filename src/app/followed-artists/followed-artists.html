@@ -3,6 +3,10 @@
     [legend]="`Followed Artists (${artists().length})`"
     class="table-container heightFixedFieldset"
   >
-    <app-artist-list [value]="sortedArtists()" [noHightlight]="true"></app-artist-list>
+    <app-artist-list
+      [value]="sortedArtists()"
+      [noHightlight]="true"
+      [noScore]="true"
+    ></app-artist-list>
   </p-fieldset>
 </div>

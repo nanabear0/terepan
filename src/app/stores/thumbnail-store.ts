@@ -71,19 +71,29 @@ export class ThumbnailStore {
   }
 
   http = inject(HttpClient);
-  updateStoreForRelease(albums: Album[]) {
-    albums.forEach(({ id }) => {
-      if (this.contains(id)) return;
-
-      this.http
-        .get('https://coverartarchive.org/release-group/' + id)
-        .pipe(
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          map((r: any) => r.images[0].thumbnails.small)
-        )
-        .subscribe((url: string) => {
-          this.add(id, url);
-        });
-    });
+  updateQueue = signal<Set<string>>(new Set());
+  queueAlbumsForThumbnailUpdate(albums: Album[]) {
+    if (this.ready()) {
+      this.updateQueue.update(
+        (oldQueue) => new Set([...oldQueue, ...albums.map((album) => album.id)])
+      );
+    }
   }
+
+  updateThumbnailStore = effect(async () => {
+    const updateQueue = this.updateQueue();
+    const first = updateQueue.values().next().value;
+    if (!first) return;
+
+    updateQueue.delete(first);
+    const url = await this.http
+      .get('https://coverartarchive.org/release-group/' + first)
+      .pipe(
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        map((r: any) => r.images[0].thumbnails.small)
+      )
+      .toPromise();
+    this.add(first, url);
+    this.updateQueue.set(new Set([...updateQueue]));
+  });
 }
