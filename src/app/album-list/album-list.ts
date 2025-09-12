@@ -19,10 +19,9 @@ export class AlbumList {
   http = inject(HttpClient);
   thumbnailStore = inject(ThumbnailStore);
 
-  effectRef = effect(() => {
+  thumbnailUpdateEffect = effect(() => {
     if (this.thumbnailStore.ready()) {
       this.thumbnailStore.updateStoreForRelease(this.value());
-      this.effectRef.destroy();
     }
   });
 
