@@ -1,15 +1,15 @@
+import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
-import { Component, computed, effect, HostBinding, inject, input } from '@angular/core';
+import { Component, computed, effect, inject, input } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
-import { ImageModule } from 'primeng/image';
-import { TableModule, TablePageEvent } from 'primeng/table';
-import { Album } from '../music-brainz/album';
-import { ThumbnailStore } from '../stores/thumbnail-store';
-import { CommonModule } from '@angular/common';
 import { ChipModule } from 'primeng/chip';
+import { ImageModule } from 'primeng/image';
+import { TableModule } from 'primeng/table';
+import { Album } from '../music-brainz/album';
 import { ReleaseTypeFilter } from '../release-type-filter/release-type-filter';
 import { ReleaseTypesStore } from '../stores/release-types-store';
+import { ThumbnailStore } from '../stores/thumbnail-store';
 
 @Component({
   selector: 'app-album-list',
@@ -44,11 +44,4 @@ export class AlbumList {
   thumbnailUpdateEffect = effect(() => {
     this.thumbnailStore.queueAlbumsForThumbnailUpdate(this.filteredAlbums());
   });
-
-  first = 0;
-  rows = 10;
-  pageChange(event: TablePageEvent) {
-    this.first = event.first;
-    this.rows = event.rows;
-  }
 }

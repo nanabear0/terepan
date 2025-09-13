@@ -3,10 +3,10 @@ import { ChangeDetectorRef, Component, inject, input, signal } from '@angular/co
 import { RouterLink } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
 import { DrawerModule } from 'primeng/drawer';
-import { TableModule, TablePageEvent } from 'primeng/table';
+import { TableModule } from 'primeng/table';
+import { Artist as ArtistComponent } from '../artist/artist';
 import { Artist } from '../music-brainz/artist';
 import { FollowedArtistsStore } from '../stores/followed-artists-store';
-import { Artist as ArtistComponent } from '../artist/artist';
 
 @Component({
   selector: 'app-artist-list',
@@ -50,12 +50,5 @@ export class ArtistList {
       return 'selectedArtist';
     }
     return null;
-  }
-
-  first = 0;
-  rows = 10;
-  pageChange(event: TablePageEvent) {
-    this.first = event.first;
-    this.rows = event.rows;
   }
 }
