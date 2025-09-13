@@ -47,6 +47,10 @@ export class App {
       routerLink: '/export',
       label: 'Export',
     },
+    {
+      routerLink: '/bulk-add',
+      label: 'Bulk Add',
+    },
   ];
 
   latestReleasesStore = inject(LatestReleasesStore);

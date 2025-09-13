@@ -73,7 +73,7 @@ export class MusicBrainz {
     );
   }
 
-  public searchArtist(artistName: string, score?: number): Observable<Artist[]> {
+  public searchArtistByName(artistName: string, score?: number): Observable<Artist[]> {
     return this.httpClient
       .get<any>(`${MusicBrainz.API_ROOT}artist?query=name:${artistName}&limit=100`)
       .pipe(

@@ -1,0 +1,38 @@
+<div class="root">
+  <p-fieldset legend="Add artists names or id's in each line">
+    <form class="input-fields" [formGroup]="bulkAddForm" (ngSubmit)="search()">
+      <textarea pTextarea id="input" formControlName="input" class="textarea"></textarea>
+      <div class="actions">
+        <p-button
+          label="Search"
+          type="submit"
+          [disabled]="!bulkAddForm.valid || itemsInProgress() > 0"
+        />
+        @if(itemsInProgress()>0) {
+        <p-message severity="info" icon="pi pi-spin pi-spinner"> Searching</p-message>
+        }
+      </div>
+    </form>
+  </p-fieldset>
+
+  <p-tabs value="0">
+    <p-tablist>
+      <p-tab value="0">Exact Matches</p-tab>
+      <p-tab value="1">Partial Matches</p-tab>
+      <p-tab value="2">Review</p-tab>
+    </p-tablist>
+    <p-tabpanels [style]="{ 'flex-grow': 1 }">
+      <p-tabpanel value="0">
+        <p-fieldset legend="Exact matches" class="table-container heightFixedFieldset">
+          <app-artist-list
+            [value]="exactMatches()"
+            [noAction]="true"
+            [noScore]="true"
+          ></app-artist-list>
+        </p-fieldset>
+      </p-tabpanel>
+      <p-tabpanel value="1"> </p-tabpanel>
+      <p-tabpanel value="2"> </p-tabpanel>
+    </p-tabpanels>
+  </p-tabs>
+</div>
