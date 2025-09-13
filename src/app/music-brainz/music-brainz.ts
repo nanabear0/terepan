@@ -76,8 +76,9 @@ export class MusicBrainz {
   public searchArtist(artistName: string, score?: number): Observable<Artist[]> {
     return this.httpClient
       .get<any>(`${MusicBrainz.API_ROOT}artist?query=name:${artistName}&limit=100`)
-      .pipe(map(MusicBrainz.mapArtists))
       .pipe(
+        this.infiniteRetry,
+        map(MusicBrainz.mapArtists),
         map((artists: Artist[]) =>
           artists.filter((artist: Artist) => !artist.score || !score || artist.score > score)
         )
@@ -87,8 +88,16 @@ export class MusicBrainz {
   public getArtist(artistId: string): Observable<Artist> {
     return this.httpClient
       .get<any>(`${MusicBrainz.API_ROOT}artist/${artistId}`)
-      .pipe(map(MusicBrainz.mapArtist));
+      .pipe(this.infiniteRetry, map(MusicBrainz.mapArtist));
   }
+
+  private infiniteRetry = retryWhen((err$) =>
+    err$.pipe(
+      mergeScan((attempt) => of(attempt + 1), 0),
+      delayWhen((attempt) => timer(50 * Math.pow(2, attempt - 1))),
+      takeWhile(() => true) // retry forever
+    )
+  );
 
   private fetchAllPages<T>(
     urlBase: string,
@@ -100,14 +109,8 @@ export class MusicBrainz {
     const loadPage = (offset: number, acc: T[] = []): Observable<T[]> =>
       this.httpClient.get<any>(`${urlBase}&limit=${limit}&offset=${offset}`).pipe(
         delay(50),
-        retryWhen((err$) =>
-          err$.pipe(
-            mergeScan((attempt) => of(attempt + 1), 0),
-            delayWhen((attempt) => timer(50 * Math.pow(2, attempt - 1))),
-            takeWhile(() => true) // retry forever
-          )
-        ),
-        mergeMap((res) => {
+        this.infiniteRetry,
+        mergeMap((res: any) => {
           const newAcc = [...acc, ...mapFn(res)];
           const fixedOffset = res[offsetKey] ?? offset;
           return (res[countKey] ?? 0) <= fixedOffset + limit
