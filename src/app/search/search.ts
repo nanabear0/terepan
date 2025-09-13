@@ -36,8 +36,10 @@ export class Search {
   public async search() {
     this.musicBrainzService
       .searchArtist(this.artistForm.value.name ?? '', this.artistForm.value.score ?? undefined)
-      .forEach((result: Artist[]) => {
+      .subscribe((result: Artist[]) => {
         this.result.set(result);
+        const virtualScroller = document.querySelector('.p-virtualscroller');
+        if (virtualScroller) virtualScroller.scrollTop = 0;
       });
   }
 }
