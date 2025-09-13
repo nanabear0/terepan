@@ -42,7 +42,7 @@ export class AlbumList {
   });
 
   thumbnailUpdateEffect = effect(() => {
-    this.thumbnailStore.queueAlbumsForThumbnailUpdate(this.value());
+    this.thumbnailStore.queueAlbumsForThumbnailUpdate(this.filteredAlbums());
   });
 
   first = 0;

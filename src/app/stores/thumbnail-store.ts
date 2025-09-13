@@ -81,6 +81,7 @@ export class ThumbnailStore {
   updateThumbnailStore = effect(async () => {
     if (!this.ready()) return;
     const updateQueue = this.updateQueue();
+    if (!updateQueue.size) return;
     const toUpdate = new Set([...updateQueue].slice(0, 10));
     toUpdate.forEach((first) => updateQueue.delete(first));
 
