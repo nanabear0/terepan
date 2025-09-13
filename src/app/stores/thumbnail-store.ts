@@ -74,7 +74,11 @@ export class ThumbnailStore {
   updateQueue = signal<Set<string>>(new Set());
   queueAlbumsForThumbnailUpdate(albums: Album[]) {
     this.updateQueue.update(
-      (oldQueue) => new Set([...albums.map((album) => album.id), ...oldQueue])
+      (oldQueue) =>
+        new Set([
+          ...albums.filter((album) => !this.contains(album.id)).map((album) => album.id),
+          ...oldQueue,
+        ])
     );
   }
 
@@ -82,11 +86,11 @@ export class ThumbnailStore {
     if (!this.ready()) return;
     const updateQueue = this.updateQueue();
     if (!updateQueue.size) return;
-    const toUpdate = new Set([...updateQueue].slice(0, 10));
+    const toUpdate = [...updateQueue].slice(0, 10);
     toUpdate.forEach((first) => updateQueue.delete(first));
 
     const results = await Promise.allSettled(
-      [...toUpdate].map((first) => {
+      toUpdate.map((first) => {
         return this.http
           .get('https://coverartarchive.org/release-group/' + first)
           .pipe(
@@ -103,9 +107,8 @@ export class ThumbnailStore {
     for (const result of results) {
       if (result.status == 'fulfilled') {
         this.add(result.value.first, result.value.url);
-        toUpdate.delete(result.value.first);
       }
     }
-    this.updateQueue.set(new Set([...updateQueue, ...toUpdate]));
+    this.updateQueue.set(new Set([...updateQueue]));
   });
 }
