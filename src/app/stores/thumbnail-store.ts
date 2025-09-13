@@ -74,25 +74,37 @@ export class ThumbnailStore {
   updateQueue = signal<Set<string>>(new Set());
   queueAlbumsForThumbnailUpdate(albums: Album[]) {
     this.updateQueue.update(
-      (oldQueue) => new Set([...oldQueue, ...albums.map((album) => album.id)])
+      (oldQueue) => new Set([...albums.map((album) => album.id), ...oldQueue])
     );
   }
 
   updateThumbnailStore = effect(async () => {
     if (!this.ready()) return;
     const updateQueue = this.updateQueue();
-    const first = updateQueue.values().next().value;
-    if (!first) return;
+    const toUpdate = new Set([...updateQueue].slice(0, 10));
+    toUpdate.forEach((first) => updateQueue.delete(first));
 
-    updateQueue.delete(first);
-    const url = await this.http
-      .get('https://coverartarchive.org/release-group/' + first)
-      .pipe(
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        map((r: any) => r.images[0].thumbnails.small)
-      )
-      .toPromise();
-    this.add(first, url);
-    this.updateQueue.set(new Set([...updateQueue]));
+    const results = await Promise.allSettled(
+      [...toUpdate].map((first) => {
+        return this.http
+          .get('https://coverartarchive.org/release-group/' + first)
+          .pipe(
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            map((r: any) => r.images[0].thumbnails.small)
+          )
+          .toPromise()
+          .then((url) => ({
+            first,
+            url,
+          }));
+      })
+    );
+    for (const result of results) {
+      if (result.status == 'fulfilled') {
+        this.add(result.value.first, result.value.url);
+        toUpdate.delete(result.value.first);
+      }
+    }
+    this.updateQueue.set(new Set([...updateQueue, ...toUpdate]));
   });
 }
