@@ -27,7 +27,7 @@ export class LatestReleasesStore {
             const typedAlbum = await albumSchema.cast(album);
             albums.push(typedAlbum);
           } catch (e) {
-            console.log(e);
+            console.log(e, album);
           }
         }
         return albums;
@@ -49,6 +49,9 @@ export class LatestReleasesStore {
 
   private async loadCache() {
     const newCache = await this.parseAlbums(localStorage.getItem(this.localStorageKey) ?? '');
+    newCache?.forEach((album) =>
+      this.releaseTypesStore.addReleaseTypes(album.primaryType, album.secondaryTypes)
+    );
     this.releases.set(this.cleanUpAlbums(newCache ?? []));
   }
 
