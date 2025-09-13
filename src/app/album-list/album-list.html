@@ -1,57 +1,68 @@
 <!-- eslint-disable @angular-eslint/template/click-events-have-key-events -->
 <!-- eslint-disable @angular-eslint/template/interactive-supports-focus -->
-<p-table
-  [value]="value()"
-  [scrollable]="true"
-  scrollHeight="flex"
-  [value]="value()"
-  [scrollable]="true"
-  [virtualScroll]="true"
-  [virtualScrollItemSize]="93"
-  sortField="firstReleaseDate"
-  [sortOrder]="-1"
-  dataKey="id"
->
-  <ng-template #header>
-    <tr>
-      <th>Cover</th>
-      @if (showArtist()) {
-      <th pSortableColumn="artist.name">Artist <p-sortIcon field="artist.name" /></th>
-      }
-      <th pSortableColumn="title">Title <p-sortIcon field="title" /></th>
-      <th pSortableColumn="firstReleaseDate">
-        First release date <p-sortIcon field="firstReleaseDate" />
-      </th>
-    </tr>
-  </ng-template>
-  <ng-template #body let-album>
-    <tr>
-      <td>
-        @if (thumbnailStore.contains(album.id)) {
-        <p-image
-          [src]="thumbnailStore.get(album.id)"
-          [preview]="true"
-          [alt]="album.title"
-          class="imgThumbnail"
-          appendTo="body"
-          [previewImageSrc]="'https://coverartarchive.org/release-group/' + album.id + '/front'"
-        />
-        } @else {
-        <i class="pi pi-image" style="font-size: 64px"></i>
+<div class="root">
+  <app-release-type-filter></app-release-type-filter>
+  <p-table
+    [value]="filteredAlbums()"
+    [scrollable]="true"
+    scrollHeight="flex"
+    [scrollable]="true"
+    [virtualScroll]="true"
+    [virtualScrollItemSize]="93"
+    sortField="firstReleaseDate"
+    [sortOrder]="-1"
+    dataKey="id"
+  >
+    <ng-template #header>
+      <tr>
+        <th>Cover</th>
+        @if (showArtist()) {
+        <th pSortableColumn="artist.name">Artist <p-sortIcon field="artist.name" /></th>
         }
-      </td>
-      @if (showArtist()) {
-      <td>
-        <a
-          [routerLink]="['/artist', album.artist.id]"
-          routerLinkActive="active"
-          ariaCurrentWhenActive="page"
-          >{{ album.artist.name }}</a
-        >
-      </td>
-      }
-      <td>{{ album.title }}</td>
-      <td>{{ album.firstReleaseDate.toLocaleDateString() }}</td>
-    </tr>
-  </ng-template>
-</p-table>
+        <th pSortableColumn="title">Title <p-sortIcon field="title" /></th>
+        <th>Type</th>
+        <th pSortableColumn="firstReleaseDate">
+          First release date <p-sortIcon field="firstReleaseDate" />
+        </th>
+      </tr>
+    </ng-template>
+    <ng-template #body let-album>
+      <tr>
+        <td>
+          @if (thumbnailStore.contains(album.id)) {
+          <p-image
+            [src]="thumbnailStore.get(album.id)"
+            [preview]="true"
+            [alt]="album.title"
+            class="imgThumbnail"
+            appendTo="body"
+            [previewImageSrc]="'https://coverartarchive.org/release-group/' + album.id + '/front'"
+          />
+          } @else {
+          <i class="pi pi-image" style="font-size: 48px"></i>
+          }
+        </td>
+        @if (showArtist()) {
+        <td>
+          <a
+            [routerLink]="['/artist', album.artist.id]"
+            routerLinkActive="active"
+            ariaCurrentWhenActive="page"
+            >{{ album.artist.name }}</a
+          >
+        </td>
+        }
+        <td>{{ album.title }}</td>
+        <td>
+          <div class="typeCell">
+            <p-chip [label]="album.primaryType" />
+            @for (secondaryType of album.secondaryTypes;track $index) {
+            <p-chip [label]="secondaryType" />
+            }
+          </div>
+        </td>
+        <td>{{ album.firstReleaseDate.toLocaleDateString() }}</td>
+      </tr>
+    </ng-template>
+  </p-table>
+</div>

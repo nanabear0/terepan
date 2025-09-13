@@ -11,10 +11,12 @@ import {
   of,
   retryWhen,
   takeWhile,
+  tap,
   timer,
 } from 'rxjs';
 import { Album } from './album';
 import { Artist } from './artist';
+import { ReleaseTypesStore } from '../stores/release-types-store';
 
 @Injectable({
   providedIn: 'root',
@@ -23,6 +25,7 @@ export class MusicBrainz {
   private static API_ROOT = 'https://musicbrainz.org/ws/2/';
 
   httpClient = inject(HttpClient);
+  releaseTypesStore = inject(ReleaseTypesStore);
 
   private static toDateOrUndefined(input: string): Date | undefined {
     return input ? new Date(input) : undefined;
@@ -59,10 +62,15 @@ export class MusicBrainz {
   }
 
   private static mapAlbums(raw: any, artist?: Artist): Album[] {
-    return raw['release-groups']
-      ?.map((album: unknown) => MusicBrainz.mapAlbum(album, artist))
-      .filter((album: Album) => album.primaryType === 'Album' && !album.secondaryTypes?.length)
-      .sort((a1: Album, a2: Album) => a1.firstReleaseDate < a2.firstReleaseDate);
+    return (
+      raw['release-groups']
+        ?.map((album: unknown) => MusicBrainz.mapAlbum(album, artist))
+        // .filter((album: Album) => album.primaryType === 'Album' && !album.secondaryTypes?.length)
+        .sort(
+          (a1: Album, a2: Album) =>
+            (a1.firstReleaseDate?.getTime() ?? 0) - (a2.firstReleaseDate?.getTime() ?? 0)
+        )
+    );
   }
 
   public searchArtist(artistName: string, score?: number): Observable<Artist[]> {
@@ -110,13 +118,25 @@ export class MusicBrainz {
     return loadPage(0);
   }
 
+  tabAndSaveReleaseTypes = tap((albums: Album[]) => {
+    albums.forEach((album) =>
+      this.releaseTypesStore.addReleaseTypes(album.primaryType, album.secondaryTypes)
+    );
+  });
+
   public getAlbumsOfArtist(artist: Artist): Observable<Album[]> {
     return this.fetchAllPages<Album>(
-      `${MusicBrainz.API_ROOT}release-group?artist=${artist.id}&type=album`,
+      `${MusicBrainz.API_ROOT}release-group?artist=${artist.id}`,
       (album) => MusicBrainz.mapAlbums(album, artist),
       100,
       'release-group-count',
       'release-group-offset'
+    ).pipe(
+      tap((albums) => {
+        albums.forEach((album) =>
+          this.releaseTypesStore.addReleaseTypes(album.primaryType, album.secondaryTypes)
+        );
+      })
     );
   }
 
@@ -124,9 +144,15 @@ export class MusicBrainz {
     const ids = artists.map(({ id }) => id);
 
     return this.fetchAllPages<Album>(
-      `${MusicBrainz.API_ROOT}release-group?query=arid:(${ids.join(' OR ')})&type=album`,
+      `${MusicBrainz.API_ROOT}release-group?query=arid:(${ids.join(' OR ')})`,
       (album) => MusicBrainz.mapAlbums(album),
       100
+    ).pipe(
+      tap((albums) => {
+        albums.forEach((album) =>
+          this.releaseTypesStore.addReleaseTypes(album.primaryType, album.secondaryTypes)
+        );
+      })
     );
     // .pipe(
     //   map((artists) =>

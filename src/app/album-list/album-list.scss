@@ -1,11 +1,22 @@
 .imgThumbnail {
-  width: 64px;
-  height: 64px;
+  width: 48px;
+  height: 48px;
   object-fit: contain;
 }
 
+.typeCell {
+  display: flex;
+  flex-direction: row;
+  gap: 4px;
+}
 .imgPreview {
   width: min(80vw, 80vh);
   height: min(80vw, 80vh);
   object-fit: contain;
+}
+.root {
+  display: grid;
+  grid-template-rows: auto 1fr;
+  height: 100%;
+  gap: 12px;
 }

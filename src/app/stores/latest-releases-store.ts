@@ -1,16 +1,9 @@
-import { computed, effect, inject, Injectable, signal } from '@angular/core';
+import { effect, inject, Injectable, signal } from '@angular/core';
 import { Album, albumSchema } from '../music-brainz/album';
 import { MusicBrainz } from '../music-brainz/music-brainz';
 import { FollowedArtistsStore } from './followed-artists-store';
 import { ThumbnailStore } from './thumbnail-store';
-import { map } from 'rxjs';
-
-function within6Months(album: Album) {
-  const now = new Date();
-  const date = album.firstReleaseDate;
-  const diff = (now.getTime() - date.getTime()) / (1000 * 60 * 60 * 24);
-  return diff <= 6 * 30;
-}
+import { ReleaseTypesStore } from './release-types-store';
 
 @Injectable({ providedIn: 'root' })
 export class LatestReleasesStore {
@@ -22,6 +15,7 @@ export class LatestReleasesStore {
   followedArtistsStore = inject(FollowedArtistsStore);
   thumbnailStore = inject(ThumbnailStore);
   updatesInProgress = signal(0);
+  releaseTypesStore = inject(ReleaseTypesStore);
 
   public async parseAlbums(str: string): Promise<Array<Album> | null> {
     const albums: Album[] = [];
@@ -77,10 +71,6 @@ export class LatestReleasesStore {
       cleanAlbums.push(album);
     }
     return cleanAlbums;
-  }
-
-  filterLatest(albums: Album[]) {
-    return albums.filter(within6Months);
   }
 
   updateEffect = effect(() => {
