@@ -1,4 +1,4 @@
-# Terepan
+# Terepan v1.0
 
 [Start using terepan!](https://nanabear0.github.io/terepan)
 
@@ -12,7 +12,3 @@ After you start adding them the page will automatically start updating it's data
 You can see all the latest releases in the latest releases page. (duh)
 
 As the page stores all it's data in the localstorage use the import and export tabs to move your followed artists between browsers. Just export to a file and import it in the import tab.
- 
-## Soon tm
-- Improve latest release caching and performance
-- Bulk add artists page
