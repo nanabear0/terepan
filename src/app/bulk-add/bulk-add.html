@@ -10,7 +10,9 @@
         />
         @if(itemsInProgress()>0) {
         <p-message severity="info" icon="pi pi-spin pi-spinner" class="message">
-          Searching</p-message
+          Searching {{ totalSearchQueued() - itemsInProgress() }}/{{
+            totalSearchQueued()
+          }}</p-message
         >
         }
         <p-button

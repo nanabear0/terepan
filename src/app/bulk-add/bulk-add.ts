@@ -60,7 +60,7 @@ export class BulkAdd {
     },
     (o) => (!o.value.input ? { input: 'required' } : null)
   );
-  lines = signal('');
+  totalSearchQueued = signal(0);
   itemsInProgress = signal(0);
 
   async search() {
@@ -72,6 +72,7 @@ export class BulkAdd {
     this.exactMatches.set([]);
     this.partialMatches.set([]);
     this.itemsInProgress.set(lines.length);
+    this.totalSearchQueued.set(lines.length);
     await Promise.allSettled(lines.map((line) => this.searchItem(line, this.useResult.bind(this))));
     this.bulkAddForm.controls.input.setValue('');
   }
