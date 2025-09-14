@@ -62,15 +62,13 @@ export class MusicBrainz {
   }
 
   private static mapAlbums(raw: any, artist?: Artist): Album[] {
-    return (
-      raw['release-groups']
-        ?.map((album: unknown) => MusicBrainz.mapAlbum(album, artist))
-        // .filter((album: Album) => album.primaryType === 'Album' && !album.secondaryTypes?.length)
-        .sort(
-          (a1: Album, a2: Album) =>
-            (a1.firstReleaseDate?.getTime() ?? 0) - (a2.firstReleaseDate?.getTime() ?? 0)
-        )
-    );
+    return raw['release-groups']
+      ?.map((album: unknown) => MusicBrainz.mapAlbum(album, artist))
+      .filter((album: Album) => !!album.primaryType)
+      .sort(
+        (a1: Album, a2: Album) =>
+          (a1.firstReleaseDate?.getTime() ?? 0) - (a2.firstReleaseDate?.getTime() ?? 0)
+      );
   }
 
   public searchArtistByName(artistName: string, score?: number): Observable<Artist[]> {
