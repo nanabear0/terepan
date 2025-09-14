@@ -157,12 +157,5 @@ export class MusicBrainz {
         );
       })
     );
-    // .pipe(
-    //   map((artists) =>
-    //     artists.sort(
-    //       (a1: Album, a2: Album) => a2.firstReleaseDate.getTime() - a1.firstReleaseDate.getTime()
-    //     )
-    //   )
-    // );
   }
 }

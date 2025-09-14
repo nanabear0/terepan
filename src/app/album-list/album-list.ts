@@ -42,6 +42,7 @@ export class AlbumList {
   });
 
   thumbnailUpdateEffect = effect(() => {
-    this.thumbnailStore.queueAlbumsForThumbnailUpdate(this.filteredAlbums());
+    const needsUpdate = this.filteredAlbums().filter((fa) => !this.thumbnailStore.contains(fa.id));
+    this.thumbnailStore.queueAlbumsForThumbnailUpdate(needsUpdate);
   });
 }

@@ -77,7 +77,7 @@ export class LatestReleasesStore {
   }
 
   updateEffect = effect(() => {
-    if (this.ready()) {
+    if (this.ready() && this.followedArtistsStore.ready()) {
       this.updatesInProgress.update((i) => i + 1);
       this.musicBrainz
         .getAlbumsOfArtists(this.followedArtistsStore.artists())
