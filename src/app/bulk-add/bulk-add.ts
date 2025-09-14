@@ -56,19 +56,7 @@ interface Match {
 export class BulkAdd {
   bulkAddForm = new FormGroup(
     {
-      input: new FormControl<string>(
-        `Kayo Dot                             
-VOLA
-Kingcrow                             
-White Moth Black Butterfly
-Leprous                              
-White Ward
-Les Discrets                         
-Wilderun
-Life on Venus                        
-Yuri Gagarin
-A.A. Williams`
-      ),
+      input: new FormControl<string>(''),
     },
     (o) => (!o.value.input ? { input: 'required' } : null)
   );
