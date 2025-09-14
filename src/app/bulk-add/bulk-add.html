@@ -1,5 +1,5 @@
 <div class="root">
-  <p-fieldset legend="Add artists names or id's in each line">
+  <p-fieldset legend="One item each line">
     <form class="input-fields" [formGroup]="bulkAddForm" (ngSubmit)="search()">
       <textarea pTextarea id="input" formControlName="input" class="textarea"></textarea>
       <div class="actions">
@@ -9,30 +9,87 @@
           [disabled]="!bulkAddForm.valid || itemsInProgress() > 0"
         />
         @if(itemsInProgress()>0) {
-        <p-message severity="info" icon="pi pi-spin pi-spinner"> Searching</p-message>
+        <p-message severity="info" icon="pi pi-spin pi-spinner" class="message">
+          Searching</p-message
+        >
         }
+        <p-button
+          label="Import all"
+          [disabled]="!(exactMatches().length && !partialMatches().length)"
+          (onClick)="importAll()"
+        />
       </div>
     </form>
   </p-fieldset>
-
-  <p-tabs value="0">
-    <p-tablist>
-      <p-tab value="0">Exact Matches</p-tab>
-      <p-tab value="1">Partial Matches</p-tab>
-      <p-tab value="2">Review</p-tab>
-    </p-tablist>
-    <p-tabpanels [style]="{ 'flex-grow': 1 }">
-      <p-tabpanel value="0">
-        <p-fieldset legend="Exact matches" class="table-container heightFixedFieldset">
-          <app-artist-list
-            [value]="exactMatches()"
-            [noAction]="true"
-            [noScore]="true"
-          ></app-artist-list>
-        </p-fieldset>
-      </p-tabpanel>
-      <p-tabpanel value="1"> </p-tabpanel>
-      <p-tabpanel value="2"> </p-tabpanel>
-    </p-tabpanels>
-  </p-tabs>
+  <div class="reviewPane">
+    <p-fieldset legend="Matches" class="table-container heightFixedFieldset">
+      <app-artist-list
+        [value]="exactMatches()"
+        [noScore]="true"
+        [noHightlight]="true"
+        [onlyName]="true"
+        customActionIcon="pi-minus-circle"
+        (customAction)="removeExactMatch($event)"
+      ></app-artist-list>
+    </p-fieldset>
+    <p-fieldset legend="Review" class="table-container heightFixedFieldset">
+      <div class="partialMatchList">
+        <p-table
+          [value]="partialMatches()"
+          [scrollable]="true"
+          scrollHeight="flex"
+          [scrollable]="true"
+          dataKey="query"
+        >
+          <ng-template #header>
+            <tr>
+              <td>Query</td>
+              <td>Actions</td>
+            </tr>
+          </ng-template>
+          <ng-template #body let-match sel>
+            <tr>
+              <td>
+                {{ match.query }}
+              </td>
+              <td>
+                <div class="tableActions">
+                  <p-button
+                    icon="pi pi-minus-circle"
+                    (click)="removePartialMatch(match)"
+                    severity="secondary"
+                    [outlined]="true"
+                  />
+                  <p-button
+                    icon="pi pi-expand"
+                    (click)="artistInReview.set(match)"
+                    severity="secondary"
+                    [outlined]="true"
+                  />
+                </div>
+              </td>
+            </tr>
+          </ng-template>
+        </p-table>
+      </div>
+    </p-fieldset>
+  </div>
 </div>
+<p-drawer
+  [visible]="!!artistInReview()"
+  (onHide)="artistInReview.set(undefined)"
+  position="bottom"
+  [style]="{ height: '80vh', padding: '24px' }"
+>
+  <ng-template #headless>
+    @if (artistInReview()?.list?.length) {
+    <app-artist-list
+      [value]="artistInReview()?.list!"
+      class="artist"
+      customActionIcon="pi-user-plus"
+      (customAction)="selectMatch($event)"
+    ></app-artist-list>
+    }
+  </ng-template>
+</p-drawer>
+<p-toast position="bottom-right"></p-toast>

@@ -16,10 +16,12 @@
       <th pSortableColumn="score">Match <p-sortIcon field="score" /></th>
       }
       <th pSortableColumn="name">Name <p-sortIcon field="name" /></th>
+      @if(!onlyName()) {
       <th pSortableColumn="area">Area <p-sortIcon field="area" /></th>
       <th pSortableColumn="begin">Begin <p-sortIcon field="begin" /></th>
       <th pSortableColumn="end">End <p-sortIcon field="end" /></th>
-      @if(!noAction()) {
+
+      } @if(!noAction()) {
       <th></th>
       }
     </tr>
@@ -40,17 +42,27 @@
           ><i class="pi pi-window-maximize"></i
         ></p-button>
       </td>
+      @if(!onlyName()) {
       <td>{{ artist.area }}</td>
       <td>{{ artist.begin?.toLocaleDateString() }}</td>
       <td>{{ artist.end?.toLocaleDateString() }}</td>
-      @if(!noAction()) {
+      } @if(!noAction()) {
       <td>
+        @if(customActionIcon()) {
+        <p-button
+          icon="pi {{ customActionIcon() }}"
+          (click)="customAction.emit(artist)"
+          severity="secondary"
+          [outlined]="true"
+        />
+        } @else {
         <p-button
           icon="pi {{ rowSelectionIcon(artist) }}"
           (click)="addArtist(artist)"
           severity="secondary"
           [outlined]="true"
         />
+        }
       </td>
       }
     </tr>

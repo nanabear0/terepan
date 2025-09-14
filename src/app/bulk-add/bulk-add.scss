@@ -18,6 +18,10 @@
     display: flex;
     flex-direction: row;
     gap: 12px;
+    justify-content: space-between;
+    .message {
+      flex-grow: 1;
+    }
   }
 }
 .table-container {
@@ -29,4 +33,29 @@
   display: flex;
   flex-direction: column;
   gap: 12px;
+}
+.reviewPane {
+  display: grid;
+  gap: 12px;
+  height: 100%;
+  grid-template-columns: 1fr 1fr;
+  @media (max-width: 640px) {
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr 1fr;
+  }
+  .partialMatchList {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    height: 100%;
+  }
+}
+.artist {
+  height: 100%;
+}
+.tableActions {
+  display: flex;
+  flex-direction: row;
+  gap: 12px;
+  justify-content: space-around;
 }

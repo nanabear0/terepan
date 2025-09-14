@@ -60,6 +60,13 @@ export class FollowedArtistsStore {
     });
   }
 
+  async addAll(artists: Artist[]) {
+    this.cache.update((oldCache) => {
+      artists.forEach((artist) => oldCache.set(artist.id, artist));
+      return new Map(oldCache);
+    });
+  }
+
   async remove(id: string) {
     this.cache.update((oldCache) => {
       oldCache.delete(id);

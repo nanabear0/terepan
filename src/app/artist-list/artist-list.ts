@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectorRef, Component, inject, input, signal } from '@angular/core';
+import { ChangeDetectorRef, Component, inject, input, output, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
 import { DrawerModule } from 'primeng/drawer';
@@ -19,6 +19,9 @@ export class ArtistList {
   noScore = input<boolean>(false);
   noHightlight = input<boolean>(false);
   noAction = input<boolean>(false);
+  onlyName = input<boolean>(false);
+  customActionIcon = input<string>();
+  customAction = output<Artist>();
   userStore = inject(FollowedArtistsStore);
   userStoreReady = this.userStore.ready;
   cd = inject(ChangeDetectorRef);
