@@ -20,7 +20,6 @@
         <th pSortableColumn="artist.name">Artist <p-sortIcon field="artist.name" /></th>
         }
         <th pSortableColumn="title">Title <p-sortIcon field="title" /></th>
-        <th>Type</th>
         <th pSortableColumn="firstReleaseDate">Date <p-sortIcon field="firstReleaseDate" /></th>
       </tr>
     </ng-template>
@@ -51,10 +50,11 @@
           >
         </td>
         }
-        <td>{{ album.title }}</td>
         <td>
+          {{ album.title }}
+
           <div class="typeCell">
-            <p-chip [label]="album.primaryType" />
+            <p-chip [label]="album.primaryType" class="typeChip" />
             @for (secondaryType of album.secondaryTypes;track $index) {
             <p-chip [label]="secondaryType" />
             }

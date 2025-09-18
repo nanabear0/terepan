@@ -1,7 +1,14 @@
 .typeCell {
   display: flex;
   flex-direction: row;
+  flex-wrap: wrap;
+  padding-top: 4px;
   gap: 4px;
+}
+.typeChip {
+  padding-block: 4px;
+  padding-inline: 8px;
+  font-size: 0.75em;
 }
 .imgPreview {
   width: min(80vw, 80vh);
