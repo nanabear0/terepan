@@ -51,9 +51,8 @@
         </td>
         }
         <td>
-          {{ album.title }}
-
-          <div class="typeCell">
+          <div class="artistCell">
+            {{ album.title }}
             <p-chip [label]="album.primaryType" class="typeChip" />
             @for (secondaryType of album.secondaryTypes;track $index) {
             <p-chip [label]="secondaryType" />
