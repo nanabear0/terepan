@@ -55,7 +55,7 @@
             {{ album.title }}
             <p-chip [label]="album.primaryType" class="typeChip" />
             @for (secondaryType of album.secondaryTypes;track $index) {
-            <p-chip [label]="secondaryType" />
+            <p-chip [label]="secondaryType" class="typeChip" />
             }
           </div>
         </td>
