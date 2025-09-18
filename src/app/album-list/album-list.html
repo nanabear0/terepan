@@ -14,16 +14,14 @@
     dataKey="id"
   >
     <ng-template #header>
-      <tr>
+      <tr class="nonTransparentHeader">
         <th>Cover</th>
         @if (showArtist()) {
         <th pSortableColumn="artist.name">Artist <p-sortIcon field="artist.name" /></th>
         }
         <th pSortableColumn="title">Title <p-sortIcon field="title" /></th>
         <th>Type</th>
-        <th pSortableColumn="firstReleaseDate">
-          First release date <p-sortIcon field="firstReleaseDate" />
-        </th>
+        <th pSortableColumn="firstReleaseDate">Date <p-sortIcon field="firstReleaseDate" /></th>
       </tr>
     </ng-template>
     <ng-template #body let-album>
@@ -37,6 +35,7 @@
             class="imgThumbnail"
             appendTo="body"
             [previewImageSrc]="'https://coverartarchive.org/release-group/' + album.id + '/front'"
+            [imageClass]="'imgThumbnail'"
           />
           } @else {
           <i class="pi pi-image" style="font-size: 48px"></i>
