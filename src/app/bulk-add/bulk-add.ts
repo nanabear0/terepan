@@ -145,14 +145,13 @@ export class BulkAdd {
       });
     }
     if (newExactMatches.length) {
-      this.followedArtistStore.addAll(newExactMatches);
+      this.followedArtistStore.addAll(newExactMatches.map((x) => x.id));
       this.messageService.add({
         severity: 'success',
         summary: 'Success',
         detail: `${newExactMatches.length} new artists are now being followed`,
       });
     }
-
     this.exactMatches.set([]);
     this.partialMatches.set([]);
     this.bulkAddForm.controls.input.setValue('');

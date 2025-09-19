@@ -1,4 +1,4 @@
-import { Component, computed, inject } from '@angular/core';
+import { Component, computed, effect, inject, signal } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
 import { FieldsetModule } from 'primeng/fieldset';
@@ -7,6 +7,9 @@ import { InputGroupAddonModule } from 'primeng/inputgroupaddon';
 import { InputTextModule } from 'primeng/inputtext';
 import { ArtistList } from '../artist-list/artist-list';
 import { FollowedArtistsStore } from '../stores/followed-artists-store';
+import { Artist, ArtistWithAlbums } from '../music-brainz/artist';
+import { combineLatest, forkJoin, zip, zipAll } from 'rxjs';
+import { ArtistMetadataStore } from '../stores/artist-metadata-store';
 
 @Component({
   selector: 'app-followed-artists',
@@ -24,11 +27,14 @@ import { FollowedArtistsStore } from '../stores/followed-artists-store';
   styleUrl: './followed-artists.scss',
 })
 export class FollowedArtists {
-  userStore = inject(FollowedArtistsStore);
-  userStoreReady = this.userStore.ready;
-
-  artists = this.userStore.artists;
-  sortedArtists = computed(() =>
-    this.userStore.artists().sort((a, b) => a.name.localeCompare(b.name))
-  );
+  artistMetadataStore = inject(ArtistMetadataStore);
+  followedArtistsStore = inject(FollowedArtistsStore);
+  followedArtists = computed(() => {
+    return (
+      this.followedArtistsStore
+        .artists()
+        .flatMap((artist) => this.artistMetadataStore.readonlyCache()?.[artist])
+        ?.filter((x): x is Artist => !!x) ?? []
+    );
+  });
 }

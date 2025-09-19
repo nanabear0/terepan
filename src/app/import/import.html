@@ -11,19 +11,19 @@
       />
       <div class="actions">
         <p-button label="Validate input" type="submit" [disabled]="!importForm.valid" />
-        @if(parsedArtistsAsList().length) {<p-button label="Import" (onClick)="import()" />}
+        @if(parsedArtistsToBeAdded().length) {<p-button label="Import" (onClick)="import()" />}
       </div>
     </form>
   </p-fieldset>
   @if (allArtistsAlreadyAdded()) {
   <p-message severity="info">All artists already followed</p-message>
-  } @else if (parsedArtistsAsList().length){
+  } @else if (parsedArtistsToBeAdded().length){
   <p-fieldset
     legend="Following artists will be imported"
     class="table-container heightFixedFieldset"
   >
     <app-artist-list
-      [value]="parsedArtistsAsList()"
+      [value]="parsedArtistsWithMetadata()"
       [noAction]="true"
       [noScore]="true"
     ></app-artist-list>

@@ -21,3 +21,9 @@
   gap: 12px;
   flex-wrap: wrap;
 }
+.menubarEnd {
+  display: flex;
+  flex-direction: row;
+  gap: 12px;
+  align-items: center;
+}

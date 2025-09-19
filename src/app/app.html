@@ -1,23 +1,30 @@
 <div class="app-root">
   <p-menubar [model]="menubarItems">
     <ng-template #end>
-      <p-avatar
-        image="./assets/trashpanda.png"
-        [style]="{
-          width: '32px',
-          height: '32px',
-          'border-radius': '32px',
-          overflow: 'hidden'
-        }"
-      />
+      <div class="menubarEnd">
+        <p-button
+          icon="pi pi-sync"
+          [rounded]="true"
+          [text]="true"
+          severity="help"
+          (onClick)="artistMetadataStore.updateMetadataCache()"
+        />
+        <p-avatar
+          image="./assets/trashpanda.png"
+          [style]="{
+            width: '32px',
+            height: '32px',
+            'border-radius': '32px',
+            overflow: 'hidden'
+          }"
+        />
+      </div>
     </ng-template>
   </p-menubar>
 
   <div class="messageGroup">
-    @if(latestReleasesUpdating()) {
-    <p-message severity="info" icon="pi pi-spin pi-spinner">
-      Latests releases are being updated</p-message
-    >
+    @if(artistMetadataStore.updatesInProgress()) {
+    <p-message severity="info" icon="pi pi-spin pi-spinner">Metadata update in progress</p-message>
     }
   </div>
   <div class="content">

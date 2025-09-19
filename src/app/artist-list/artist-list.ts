@@ -36,7 +36,7 @@ export class ArtistList {
     if (this.userStore.contains(artist.id)) {
       await this.userStore.remove(artist.id);
     } else {
-      await this.userStore.add(artist);
+      await this.userStore.add(artist.id);
     }
     this.cd.detectChanges();
   }

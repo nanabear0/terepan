@@ -1,3 +1,4 @@
+import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { Component, inject, signal } from '@angular/core';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
@@ -23,6 +24,7 @@ import { InputNumber } from 'primeng/inputnumber';
     ButtonModule,
     FieldsetModule,
     InputNumber,
+    ProgressSpinnerModule,
   ],
   templateUrl: './search.html',
   styleUrl: './search.scss',
@@ -33,7 +35,10 @@ export class Search {
 
   result = signal<Artist[]>([]);
 
+  searchInProgress = signal<boolean>(false);
+
   public async search() {
+    this.searchInProgress.set(false);
     this.musicBrainzService
       .searchArtistByName(
         this.artistForm.value.name ?? '',
@@ -41,6 +46,7 @@ export class Search {
       )
       .subscribe((result: Artist[]) => {
         this.result.set(result);
+        this.searchInProgress.set(false);
         const virtualScroller = document.querySelector('.p-virtualscroller');
         if (virtualScroller) virtualScroller.scrollTop = 0;
       });

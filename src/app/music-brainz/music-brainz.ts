@@ -15,7 +15,7 @@ import {
   timer,
 } from 'rxjs';
 import { Album } from './album';
-import { Artist } from './artist';
+import { Artist, ArtistWithAlbums } from './artist';
 import { ReleaseTypesStore } from '../stores/release-types-store';
 
 @Injectable({
@@ -89,6 +89,39 @@ export class MusicBrainz {
       .pipe(this.infiniteRetry, map(MusicBrainz.mapArtist));
   }
 
+  public static cleanUpAlbums(albums: Album[]) {
+    const cleanAlbums: Album[] = [];
+    const set = new Set<string>();
+    for (const album of albums) {
+      if (set.has(album.id)) continue;
+      set.add(album.id);
+      cleanAlbums.push(album);
+    }
+    return cleanAlbums;
+  }
+
+  public getArtistWithAlbums(artistId: string): Observable<ArtistWithAlbums> {
+    return this.getArtist(artistId).pipe(
+      mergeMap((artist: Artist) => {
+        return this.getAlbumsOfArtist(artist).pipe(
+          tap((albums: Album[]) => {
+            albums.forEach((album) =>
+              this.releaseTypesStore.addReleaseTypes(album.primaryType, album.secondaryTypes)
+            );
+          }),
+          map((value: Album[]) => ({
+            ...artist,
+            albums: value,
+          }))
+        );
+      }),
+      map((a) => {
+        a.albums = MusicBrainz.cleanUpAlbums(a.albums);
+        return a;
+      })
+    );
+  }
+
   private infiniteRetry = retryWhen((err$) =>
     err$.pipe(
       mergeScan((attempt) => of(attempt + 1), 0),
@@ -119,12 +152,6 @@ export class MusicBrainz {
     return loadPage(0);
   }
 
-  tabAndSaveReleaseTypes = tap((albums: Album[]) => {
-    albums.forEach((album) =>
-      this.releaseTypesStore.addReleaseTypes(album.primaryType, album.secondaryTypes)
-    );
-  });
-
   public getAlbumsOfArtist(artist: Artist): Observable<Album[]> {
     return this.fetchAllPages<Album>(
       `${MusicBrainz.API_ROOT}release-group?artist=${artist.id}`,
@@ -138,6 +165,14 @@ export class MusicBrainz {
           this.releaseTypesStore.addReleaseTypes(album.primaryType, album.secondaryTypes)
         );
       })
+    );
+  }
+
+  public getArtists(ids: string[]): Observable<Artist[]> {
+    return this.fetchAllPages<Artist>(
+      `${MusicBrainz.API_ROOT}artist?query=arid:(${ids.join(' OR ')})`,
+      (artist) => MusicBrainz.mapArtists(artist),
+      100
     );
   }
 

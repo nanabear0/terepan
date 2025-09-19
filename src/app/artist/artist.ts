@@ -1,12 +1,11 @@
-import { Component, effect, inject, input, signal } from '@angular/core';
+import { Component, computed, effect, inject, input } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { AlbumList } from '../album-list/album-list';
-import { Album } from '../music-brainz/album';
-import { Artist as Art } from '../music-brainz/artist';
-import { MusicBrainz } from '../music-brainz/music-brainz';
 import { ButtonModule } from 'primeng/button';
-import { FollowedArtistsStore } from '../stores/followed-artists-store';
 import { Fieldset } from 'primeng/fieldset';
+import { AlbumList } from '../album-list/album-list';
+import { MusicBrainz } from '../music-brainz/music-brainz';
+import { ArtistMetadataStore } from '../stores/artist-metadata-store';
+import { FollowedArtistsStore } from '../stores/followed-artists-store';
 
 @Component({
   selector: 'app-artist',
@@ -18,42 +17,36 @@ export class Artist {
   private route = inject(ActivatedRoute);
   value = input('');
   musicBrainzService = inject(MusicBrainz);
-
-  artist = signal<Art | undefined>(undefined);
-  albums = signal<Album[]>([]);
+  artistMetadataStore = inject(ArtistMetadataStore);
+  artistId = computed(() => this.route.snapshot.paramMap.get('id') ?? this.value());
+  artistWithAlbum = computed(() => {
+    return this.artistMetadataStore.get(this.artistId());
+  });
 
   constructor() {
     effect(() => {
-      const artistId = this.route.snapshot.paramMap.get('id') ?? this.value();
-      this.musicBrainzService.getArtist(artistId).subscribe((value: Art) => {
-        this.artist.set(value);
-        this.musicBrainzService.getAlbumsOfArtist(value).subscribe((value: Album[]) => {
-          this.albums.set(value);
-        });
-      });
+      const artistId = this.artistId();
+      if (artistId) this.artistMetadataStore.queueArtistUpdate([artistId]);
     });
   }
 
   userStore = inject(FollowedArtistsStore);
   public async addArtist() {
-    const artist = this.artist()!;
+    const artist = this.artistId()!;
     if (!artist) return;
-
-    if (this.userStore.contains(artist.id)) {
-      await this.userStore.remove(artist.id);
+    if (this.userStore.contains(artist)) {
+      await this.userStore.remove(artist);
     } else {
       await this.userStore.add(artist);
     }
   }
 
   public rowSelectionIcon() {
-    const artist = this.artist();
+    const artist = this.artistId();
     if (!artist) return '';
-
-    if (!this.userStore.contains(artist.id)) {
+    if (!this.userStore.contains(artist)) {
       return 'pi-plus';
     }
-
     return 'pi-minus';
   }
 }

@@ -1,6 +1,6 @@
 <div class="root">
   <h2 class="title">
-    {{ artist()?.name }}
+    {{ artistWithAlbum()?.name }}
     <p-button
       icon="pi {{ rowSelectionIcon() }}"
       (click)="addArtist()"
@@ -9,6 +9,6 @@
     />
   </h2>
   <p-fieldset legend="Releases" class="table-container heightFixedFieldset">
-    <app-album-list [value]="albums()"></app-album-list>
+    <app-album-list [value]="artistWithAlbum()?.albums ?? []"></app-album-list>
   </p-fieldset>
 </div>

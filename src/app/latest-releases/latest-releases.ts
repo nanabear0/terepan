@@ -6,7 +6,9 @@ import { InputGroupModule } from 'primeng/inputgroup';
 import { InputGroupAddonModule } from 'primeng/inputgroupaddon';
 import { InputTextModule } from 'primeng/inputtext';
 import { AlbumList } from '../album-list/album-list';
-import { LatestReleasesStore } from '../stores/latest-releases-store';
+import { Album } from '../music-brainz/album';
+import { ArtistMetadataStore } from '../stores/artist-metadata-store';
+import { FollowedArtistsStore } from '../stores/followed-artists-store';
 
 @Component({
   selector: 'app-latest-releases',
@@ -24,6 +26,14 @@ import { LatestReleasesStore } from '../stores/latest-releases-store';
   styleUrl: './latest-releases.scss',
 })
 export class LatestReleases {
-  latestReleasesStore = inject(LatestReleasesStore);
-  albums = computed(() => this.latestReleasesStore.releases());
+  artistMetadataStore = inject(ArtistMetadataStore);
+  followedArtistsStore = inject(FollowedArtistsStore);
+  latestReleases = computed(() => {
+    return (
+      this.followedArtistsStore
+        .artists()
+        .flatMap((artist) => this.artistMetadataStore.readonlyCache()?.[artist]?.albums)
+        ?.filter((x): x is Album => !!x) ?? []
+    );
+  });
 }
