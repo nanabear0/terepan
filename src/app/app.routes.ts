@@ -8,12 +8,12 @@ import { LatestReleases } from './latest-releases/latest-releases';
 import { BulkAdd } from './bulk-add/bulk-add';
 
 export const routes: Routes = [
-  { path: 'search', component: Search },
-  { path: 'followed-artists', component: FollowedArtists },
-  { path: 'latest-releases', component: LatestReleases },
-  { path: 'import', component: Import },
-  { path: 'export', component: Export },
-  { path: 'bulk-add', component: BulkAdd },
-  { path: 'artist/:id', component: Artist },
+  { path: 'search', component: Search, title: 'Terepan - Search' },
+  { path: 'followed-artists', component: FollowedArtists, title: 'Terepan - Followed Artists' },
+  { path: 'latest-releases', component: LatestReleases, title: 'Terepan - Latest Releases' },
+  { path: 'import', component: Import, title: 'Terepan - Import' },
+  { path: 'export', component: Export, title: 'Terepan - Export' },
+  { path: 'bulk-add', component: BulkAdd, title: 'Terepan - Bulk Add' },
+  { path: 'artist/:artistId', component: Artist, title: 'Terepan - Uknown Artist' },
   { path: '**', redirectTo: '/followed-artists' },
 ];
