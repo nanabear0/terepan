@@ -54,7 +54,7 @@ export class ArtistList {
       return 'primary';
     }
 
-    return 'danger';
+    return 'secondary';
   }
 
   public rowClass(artist: Artist) {
