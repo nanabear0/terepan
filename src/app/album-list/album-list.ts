@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
-import { Component, computed, effect, inject, input } from '@angular/core';
+import { Component, computed, inject, input } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
 import { ChipModule } from 'primeng/chip';
@@ -9,7 +9,7 @@ import { TableModule } from 'primeng/table';
 import { Album } from '../music-brainz/album';
 import { ReleaseTypeFilter } from '../release-type-filter/release-type-filter';
 import { ReleaseTypesStore } from '../stores/release-types-store';
-import { ThumbnailStore } from '../stores/thumbnail-store';
+import { AlbumCover } from './album-cover/album-cover';
 
 @Component({
   selector: 'app-album-list',
@@ -21,6 +21,7 @@ import { ThumbnailStore } from '../stores/thumbnail-store';
     CommonModule,
     ChipModule,
     ReleaseTypeFilter,
+    AlbumCover,
   ],
   templateUrl: './album-list.html',
   styleUrl: './album-list.scss',
@@ -29,7 +30,6 @@ export class AlbumList {
   value = input<Album[]>([]);
   showArtist = input<boolean>(false);
   http = inject(HttpClient);
-  thumbnailStore = inject(ThumbnailStore);
   releaseTypesStore = inject(ReleaseTypesStore);
   filteredAlbums = computed(() => {
     const { activeTypes } = this.releaseTypesStore.releaseTypes();
@@ -39,10 +39,5 @@ export class AlbumList {
         (!album.secondaryTypes ||
           album.secondaryTypes?.every((secondaryType) => activeTypes.has(secondaryType ?? '')))
     );
-  });
-
-  thumbnailUpdateEffect = effect(() => {
-    const needsUpdate = this.filteredAlbums().filter((fa) => !this.thumbnailStore.contains(fa.id));
-    this.thumbnailStore.queueAlbumsForThumbnailUpdate(needsUpdate);
   });
 }

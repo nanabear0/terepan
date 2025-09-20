@@ -22,12 +22,9 @@
     </ng-template>
   </p-menubar>
 
-  <div class="messageGroup">
-    @if(artistMetadataStore.updatesInProgress()) {
-    <p-message severity="info" icon="pi pi-spin pi-spinner">Metadata update in progress</p-message>
-    }
-  </div>
+  <div class="messageGroup"></div>
   <div class="content">
     <router-outlet />
   </div>
 </div>
+<p-toast [preventOpenDuplicates]="true" position="bottom-center"></p-toast>

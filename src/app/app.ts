@@ -1,6 +1,6 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, effect, inject, signal } from '@angular/core';
 import { Router, RouterModule, RouterOutlet } from '@angular/router';
-import { MenuItem } from 'primeng/api';
+import { MenuItem, MessageService } from 'primeng/api';
 import { AvatarModule } from 'primeng/avatar';
 import { BreadcrumbModule } from 'primeng/breadcrumb';
 import { ButtonModule } from 'primeng/button';
@@ -8,6 +8,8 @@ import { MenubarModule } from 'primeng/menubar';
 import { Message } from 'primeng/message';
 import { ScrollPanelModule } from 'primeng/scrollpanel';
 import { ArtistMetadataStore } from './stores/artist-metadata-store';
+import { ToastModule } from 'primeng/toast';
+import { ThumbnailStore } from './stores/thumbnail-store';
 @Component({
   selector: 'app-root',
   imports: [
@@ -18,10 +20,12 @@ import { ArtistMetadataStore } from './stores/artist-metadata-store';
     BreadcrumbModule,
     AvatarModule,
     MenubarModule,
+    ToastModule,
     Message,
   ],
   templateUrl: './app.html',
   styleUrl: './app.scss',
+  providers: [MessageService],
 })
 export class App {
   protected readonly title = signal('terepan');
@@ -52,6 +56,23 @@ export class App {
       label: 'Bulk Add',
     },
   ];
-
   artistMetadataStore = inject(ArtistMetadataStore);
+  thumbnailStore = inject(ThumbnailStore);
+  messageService = inject(MessageService);
+
+  constructor() {
+    effect(() => {
+      if (this.artistMetadataStore.updateInProgress()) {
+        this.messageService.add({
+          summary: 'Metadata update in progress',
+          detail: 'Content could be incomplete/outdated',
+          severity: 'info',
+          closable: false,
+          sticky: true,
+        });
+      } else {
+        this.messageService.clear();
+      }
+    });
+  }
 }

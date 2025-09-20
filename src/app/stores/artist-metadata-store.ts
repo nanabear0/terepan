@@ -34,7 +34,7 @@ export class ArtistMetadataStore {
 
       const lastUpdate = this.lastMetadataUpdate();
 
-      if (!lastUpdate || new Date().getTime() - lastUpdate.getTime() > 1000 * 60 * 60 * 4) {
+      if (!lastUpdate || new Date().getTime() - lastUpdate.getTime() > 1000 * 60 * 60 * 24) {
         this.updateMetadataCache();
       }
     });
@@ -42,7 +42,7 @@ export class ArtistMetadataStore {
 
   updateMetadataCache() {
     const artistsList: string[] = [
-      ...new Set([...Object.keys(this.cache()), ...this.followedArtistsStore.artists()]),
+      ...new Set([...this.followedArtistsStore.artists(), ...Object.keys(this.cache())]),
     ];
     this.queueArtistUpdate(artistsList, true);
     this.queueAlbumUpdate(artistsList, true);
@@ -98,8 +98,8 @@ export class ArtistMetadataStore {
 
   musicBrainz = inject(MusicBrainz);
 
-  updatesInProgress = computed(() => {
-    return this.artistUpdateQueue().size || this.albumUpdateQueue().size;
+  updateInProgress = computed(() => {
+    return !!this.artistUpdateQueue().size || !!this.albumUpdateQueue().size;
   });
   artistUpdateQueue = signal<Set<string>>(new Set());
   albumUpdateQueue = signal<Set<string>>(new Set());
@@ -183,23 +183,7 @@ export class ArtistMetadataStore {
   get(id: string): ArtistWithAlbums | undefined {
     return this.cache()[id];
   }
-  // get(id: string, safety: number = 0): Observable<ArtistWithAlbums | undefined> {
-  //   const cache = this.cache();
-  //   const result = cache[id];
-  //   if (result) {
-  //     return of(result);
-  //   }
 
-  //   return timer(safety).pipe(
-  //     switchMap(() =>
-  //       this.musicBrainz.getArtistWithAlbums(id).pipe(
-  //         tap((artist) => {
-  //           if (artist) this.cache.update((oldCache) => ({ ...oldCache, [artist.id]: artist }));
-  //         })
-  //       )
-  //     )
-  //   );
-  // }
   clear() {
     localStorage.removeItem(this.localStorageKey);
   }

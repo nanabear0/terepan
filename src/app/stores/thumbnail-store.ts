@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { effect, inject, Injectable, signal } from '@angular/core';
+import { computed, effect, inject, Injectable, signal } from '@angular/core';
 import { map } from 'rxjs';
 import * as yup from 'yup';
 import { Album } from '../music-brainz/album';
@@ -72,8 +72,11 @@ export class ThumbnailStore {
 
   http = inject(HttpClient);
   updateQueue = signal<Set<string>>(new Set());
-  queueAlbumsForThumbnailUpdate(albums: Album[]) {
-    const needsUpdate = albums.filter((album) => !this.contains(album.id)).map((album) => album.id);
+  updatesInProgress = computed(() => {
+    return this.updateQueue().size;
+  });
+  queueAlbumsForThumbnailUpdate(...albumIds: string[]) {
+    const needsUpdate = albumIds.filter((albumId) => !this.contains(albumId));
     if (needsUpdate) {
       this.updateQueue.update((oldQueue) => new Set([...needsUpdate, ...oldQueue]));
     }

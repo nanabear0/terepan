@@ -1,0 +1,13 @@
+@let albumx = album(); @if (albumx && thumbnailStore.contains(albumx.id)) {
+<p-image
+  [src]="thumbnailStore.get(albumx.id)"
+  [preview]="true"
+  [alt]="albumx.title"
+  class="imgThumbnail"
+  appendTo="body"
+  [previewImageSrc]="'https://coverartarchive.org/release-group/' + albumx.id + '/front'"
+  [imageClass]="'imgThumbnail'"
+/>
+} @else {
+<i class="pi pi-image" style="font-size: 48px"></i>
+}

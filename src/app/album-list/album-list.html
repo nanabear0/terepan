@@ -26,19 +26,7 @@
     <ng-template #body let-album>
       <tr>
         <td>
-          @if (thumbnailStore.contains(album.id)) {
-          <p-image
-            [src]="thumbnailStore.get(album.id)"
-            [preview]="true"
-            [alt]="album.title"
-            class="imgThumbnail"
-            appendTo="body"
-            [previewImageSrc]="'https://coverartarchive.org/release-group/' + album.id + '/front'"
-            [imageClass]="'imgThumbnail'"
-          />
-          } @else {
-          <i class="pi pi-image" style="font-size: 48px"></i>
-          }
+          <app-album-cover [album]="album"></app-album-cover>
         </td>
         @if (showArtist()) {
         <td>
