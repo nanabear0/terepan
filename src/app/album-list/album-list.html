@@ -41,9 +41,9 @@
         <td>
           <div class="artistCell">
             {{ album.title }}
-            <p-chip [label]="album.primaryType" class="typeChip" />
+            <p-tag [value]="album.primaryType" />
             @for (secondaryType of album.secondaryTypes;track $index) {
-            <p-chip [label]="secondaryType" class="typeChip" />
+            <p-tag [value]="secondaryType" severity="secondary" />
             }
           </div>
         </td>

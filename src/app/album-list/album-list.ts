@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Component, computed, inject, input } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
+import { TagModule } from 'primeng/tag';
 import { ChipModule } from 'primeng/chip';
 import { ImageModule } from 'primeng/image';
 import { TableModule } from 'primeng/table';
@@ -22,6 +23,7 @@ import { AlbumCover } from './album-cover/album-cover';
     ChipModule,
     ReleaseTypeFilter,
     AlbumCover,
+    TagModule,
   ],
   templateUrl: './album-list.html',
   styleUrl: './album-list.scss',
