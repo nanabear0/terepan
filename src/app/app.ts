@@ -5,10 +5,9 @@ import { AvatarModule } from 'primeng/avatar';
 import { BreadcrumbModule } from 'primeng/breadcrumb';
 import { ButtonModule } from 'primeng/button';
 import { MenubarModule } from 'primeng/menubar';
-import { Message } from 'primeng/message';
 import { ScrollPanelModule } from 'primeng/scrollpanel';
-import { ArtistMetadataStore } from './stores/artist-metadata-store';
 import { ToastModule } from 'primeng/toast';
+import { ArtistMetadataStore } from './stores/artist-metadata-store';
 import { ThumbnailStore } from './stores/thumbnail-store';
 @Component({
   selector: 'app-root',
@@ -21,7 +20,6 @@ import { ThumbnailStore } from './stores/thumbnail-store';
     AvatarModule,
     MenubarModule,
     ToastModule,
-    Message,
   ],
   templateUrl: './app.html',
   styleUrl: './app.scss',
