@@ -6,6 +6,7 @@ import { AlbumList } from '../album-list/album-list';
 import { MusicBrainz } from '../music-brainz/music-brainz';
 import { ArtistMetadataStore } from '../stores/artist-metadata-store';
 import { FollowedArtistsStore } from '../stores/followed-artists-store';
+import { Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-artist',
@@ -18,15 +19,23 @@ export class Artist {
   value = input('');
   musicBrainzService = inject(MusicBrainz);
   artistMetadataStore = inject(ArtistMetadataStore);
-  artistId = computed(() => this.route.snapshot.paramMap.get('id') ?? this.value());
+  artistId = computed(() => this.route.snapshot.paramMap.get('artistId') ?? this.value());
   artistWithAlbum = computed(() => {
     return this.artistMetadataStore.get(this.artistId());
   });
+  title = inject(Title);
 
   constructor() {
     effect(() => {
       const artistId = this.artistId();
       if (artistId) this.artistMetadataStore.queueArtistUpdate([artistId]);
+    });
+
+    effect(() => {
+      const artist = this.artistWithAlbum();
+      if (artist && !this.value()) {
+        this.title.setTitle(`Terepan - ${artist.name}`);
+      }
     });
   }
 
