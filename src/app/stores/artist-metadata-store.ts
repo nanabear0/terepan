@@ -35,16 +35,17 @@ export class ArtistMetadataStore {
       const lastUpdate = this.lastMetadataUpdate();
 
       if (!lastUpdate || new Date().getTime() - lastUpdate.getTime() > 1000 * 60 * 60 * 4) {
-        this.queueArtistUpdate(this.followedArtistsStore.artists(), true);
-        this.queueAlbumUpdate(this.followedArtistsStore.artists(), true);
-        this.lastMetadataUpdate.set(new Date());
+        this.updateMetadataCache();
       }
     });
   }
 
   updateMetadataCache() {
-    this.queueArtistUpdate(this.followedArtistsStore.artists(), true);
-    this.queueAlbumUpdate(this.followedArtistsStore.artists(), true);
+    const artistsList: string[] = [
+      ...new Set([...Object.keys(this.cache()), ...this.followedArtistsStore.artists()]),
+    ];
+    this.queueArtistUpdate(artistsList, true);
+    this.queueAlbumUpdate(artistsList, true);
     this.lastMetadataUpdate.set(new Date());
   }
 
