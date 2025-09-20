@@ -59,7 +59,7 @@
         <p-button
           icon="pi {{ rowSelectionIcon(artist) }}"
           (click)="addArtist(artist)"
-          severity="secondary"
+          [severity]="rowSelectionSeverity(artist)"
           [outlined]="true"
         />
         }

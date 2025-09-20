@@ -48,6 +48,15 @@ export class ArtistList {
 
     return 'pi-minus';
   }
+
+  public rowSelectionSeverity(artist: Artist) {
+    if (!this.userStore.contains(artist.id)) {
+      return 'primary';
+    }
+
+    return 'danger';
+  }
+
   public rowClass(artist: Artist) {
     if (this.userStore.contains(artist.id)) {
       return 'selectedArtist';

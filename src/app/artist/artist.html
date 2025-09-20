@@ -1,12 +1,25 @@
 <div class="root">
   <h2 class="title">
-    {{ artistWithAlbum()?.name }}
-    <p-button
-      icon="pi {{ rowSelectionIcon() }}"
+    {{ artistWithAlbum()?.name }} @if(isArtistFollowed()){<p-tag value="Followed"></p-tag>} @if
+    (!isArtistFollowed()) {<p-button
       (click)="addArtist()"
+      icon="pi pi-plus"
       severity="secondary"
       [outlined]="true"
+      class="addButton"
+      label="Follow"
+      severity="primary"
     />
+    } @else {<p-button
+      (click)="addArtist()"
+      icon="pi pi-minus"
+      severity="secondary"
+      [outlined]="true"
+      class="addButton"
+      label="Unfollow"
+      severity="danger"
+    />
+    }
   </h2>
   <p-fieldset legend="Releases" class="table-container heightFixedFieldset">
     <app-album-list [value]="artistWithAlbum()?.albums ?? []"></app-album-list>

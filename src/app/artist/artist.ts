@@ -7,10 +7,11 @@ import { MusicBrainz } from '../music-brainz/music-brainz';
 import { ArtistMetadataStore } from '../stores/artist-metadata-store';
 import { FollowedArtistsStore } from '../stores/followed-artists-store';
 import { Title } from '@angular/platform-browser';
+import { Tag } from 'primeng/tag';
 
 @Component({
   selector: 'app-artist',
-  imports: [AlbumList, ButtonModule, Fieldset],
+  imports: [AlbumList, ButtonModule, Fieldset, Tag],
   templateUrl: './artist.html',
   styleUrl: './artist.scss',
 })
@@ -51,19 +52,17 @@ export class Artist {
   public async addArtist() {
     const artist = this.artistId()!;
     if (!artist) return;
-    if (this.userStore.contains(artist)) {
+
+    if (this.isArtistFollowed()) {
       await this.userStore.remove(artist);
     } else {
       await this.userStore.add(artist);
     }
   }
 
-  public rowSelectionIcon() {
-    const artist = this.artistId();
-    if (!artist) return '';
-    if (!this.userStore.contains(artist)) {
-      return 'pi-plus';
-    }
-    return 'pi-minus';
-  }
+  isArtistFollowed = computed(() => {
+    const artist = this.artistId()!;
+    if (!artist) return;
+    return this.userStore.contains(artist);
+  });
 }
