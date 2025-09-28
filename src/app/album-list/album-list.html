@@ -26,21 +26,24 @@
     <ng-template #body let-album>
       <tr>
         <td>
-          <app-album-cover [album]="album"></app-album-cover>
+          <app-album-cover
+            [id]="album.id"
+            class="album-cover"
+            [alt]="album.title"
+          ></app-album-cover>
         </td>
         @if (showArtist()) {
         <td>
-          <a
-            [routerLink]="['/artist', album.artist.id]"
-            routerLinkActive="active"
-            ariaCurrentWhenActive="page"
-            >{{ album.artist.name }}</a
-          >
+          <a [routerLink]="['/artist', album.artist.id]">{{ album.artist.name }}</a>
         </td>
         }
         <td>
           <div class="artistCell">
-            {{ album.title }}
+            <a
+              [routerLink]="['/artist', album.artist.id, 'album', album.id]"
+              [skipLocationChange]="false"
+              >{{ album.title }}</a
+            >
             <p-tag [value]="album.primaryType" />
             @for (secondaryType of album.secondaryTypes;track $index) {
             <p-tag [value]="secondaryType" severity="secondary" />

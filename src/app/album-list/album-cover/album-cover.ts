@@ -14,14 +14,24 @@ import { ThumbnailStore } from '../../stores/thumbnail-store';
   styleUrl: './album-cover.scss',
 })
 export class AlbumCover {
-  album = input<Album>();
+  id = input<string>();
+  alt = input<string>();
+  type = input<'release' | 'release-group'>('release-group');
   thumbnailStore = inject(ThumbnailStore);
 
   thumbnailUpdateEffect = effect(() => {
-    const albumId = this.album()?.id;
+    const albumId = this.id();
     if (albumId) {
-      const needsUpdate = !this.thumbnailStore.contains(albumId);
-      this.thumbnailStore.queueAlbumsForThumbnailUpdate(albumId);
+      switch (this.type()) {
+        case 'release':
+          console.log('queue release', albumId, this.thumbnailStore.contains(albumId));
+          this.thumbnailStore.queueReleasesForThumbnailUpdate(albumId);
+          break;
+        case 'release-group':
+          console.log('queue release-group', albumId, this.thumbnailStore.contains(albumId));
+          this.thumbnailStore.queueAlbumsForThumbnailUpdate(albumId);
+          break;
+      }
     }
   });
 }

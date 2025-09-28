@@ -17,6 +17,7 @@ import {
 import { Album } from './album';
 import { Artist, ArtistWithAlbums } from './artist';
 import { ReleaseTypesStore } from '../stores/release-types-store';
+import { Release } from './release';
 
 @Injectable({
   providedIn: 'root',
@@ -69,6 +70,21 @@ export class MusicBrainz {
         (a1: Album, a2: Album) =>
           (a1.firstReleaseDate?.getTime() ?? 0) - (a2.firstReleaseDate?.getTime() ?? 0)
       );
+  }
+
+  private static mapRelease(raw: any): Release {
+    return {
+      id: raw.id,
+      status: raw.status,
+      country: raw.country,
+      date: new Date(raw['date']),
+      format: [...new Set([...(raw.media?.map((x: any) => x?.format) ?? [])])].join(', '),
+      tracks: raw.media?.map((x: any) => x?.['track-count']).join('+'),
+    };
+  }
+
+  private static mapReleases(raw: any): Release[] {
+    return raw['releases']?.map((album: unknown) => MusicBrainz.mapRelease(album));
   }
 
   public searchArtistByName(artistName: string, score?: number): Observable<Artist[]> {
@@ -165,6 +181,16 @@ export class MusicBrainz {
           this.releaseTypesStore.addReleaseTypes(album.primaryType, album.secondaryTypes)
         );
       })
+    );
+  }
+
+  public getReleasesOfAlbum(album: Album): Observable<Release[]> {
+    return this.fetchAllPages<Release>(
+      `${MusicBrainz.API_ROOT}release?release-group=${album.id}&inc=media`,
+      (album) => MusicBrainz.mapReleases(album),
+      100,
+      'release-count',
+      'release-offset'
     );
   }
 

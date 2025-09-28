@@ -1,0 +1,12 @@
+<div class="root">
+  <p-panel [showHeader]="false">
+    <div class="albumPanel">
+      <app-album-cover class="cover" [id]="album()?.id"></app-album-cover>
+      <h2 class="album-title">{{ album()?.title }}</h2>
+      <span class="artist-name">{{ artist()?.name }}</span>
+    </div>
+  </p-panel>
+  <p-fieldset legend="Releases" class="table-container heightFixedFieldset">
+    <app-release-list [value]="releases()"></app-release-list>
+  </p-fieldset>
+</div>

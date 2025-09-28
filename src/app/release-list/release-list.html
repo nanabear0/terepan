@@ -1,0 +1,38 @@
+<p-table
+  [value]="value()"
+  [scrollable]="true"
+  scrollHeight="flex"
+  [value]="value()"
+  [scrollable]="true"
+  [virtualScroll]="true"
+  [virtualScrollItemSize]="77"
+  sortField="date"
+  [sortOrder]="1"
+  dataKey="id"
+>
+  <ng-template #header>
+    <tr class="nonTransparentHeader">
+      <th>Cover</th>
+      <th>Format</th>
+      <th>Tracks</th>
+      <th>Country</th>
+      <th pSortableColumn="date">Date <p-sortIcon field="date" /></th>
+    </tr>
+  </ng-template>
+  <ng-template #body let-release sel>
+    <tr>
+      <td>
+        <app-album-cover
+          [id]="release.id"
+          [type]="'release'"
+          class="album-cover"
+          [alt]="release.title"
+        ></app-album-cover>
+      </td>
+      <td>{{ release.format }}</td>
+      <td>{{ release.tracks }}</td>
+      <td>{{ release.country && localizer.of(release.country) }}</td>
+      <td>{{ release.date?.toLocaleDateString() }}</td>
+    </tr>
+  </ng-template>
+</p-table>

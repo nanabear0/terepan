@@ -43,7 +43,7 @@ export class Artist {
   updateEffect = effect(() => {
     if (this.artistWithAlbum()) {
       this.artistMetadataStore.queueArtistUpdate([this.artistId()], true);
-      this.artistMetadataStore.queueArtistUpdate([this.artistId()], true);
+      this.artistMetadataStore.queueAlbumUpdate([this.artistId()], true);
       this.updateEffect.destroy();
     }
   });

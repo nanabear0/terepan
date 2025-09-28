@@ -1,0 +1,38 @@
+.root {
+  display: grid;
+  grid-template-rows: min-content 1fr;
+  max-height: 100%;
+  height: 100%;
+}
+.albumPanel {
+  padding-top: 16px;
+  display: grid;
+  column-gap: 24px;
+  row-gap: 12px;
+  grid-template-columns: auto 1fr;
+  grid-template-rows: auto auto;
+  grid-template-areas:
+    'cover album-title'
+    'cover artist-name'
+    'cover _';
+  .cover {
+    grid-area: cover;
+    height: 128px;
+    width: 128px;
+  }
+  .album-title {
+    padding: 0;
+    margin: 0;
+    grid-area: album-title;
+  }
+  .artist-name {
+    padding: 0;
+    margin: 0;
+    grid-area: artist-name;
+  }
+}
+
+.table-container {
+  min-height: 0;
+  max-height: 100%;
+}

@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { computed, effect, inject, Injectable, signal } from '@angular/core';
-import { map } from 'rxjs';
+import { lastValueFrom, map } from 'rxjs';
 import * as yup from 'yup';
 import { Album } from '../music-brainz/album';
 
@@ -71,44 +71,61 @@ export class ThumbnailStore {
   }
 
   http = inject(HttpClient);
-  updateQueue = signal<Set<string>>(new Set());
+  albumUpdateQueue = signal<Set<string>>(new Set());
+  releaseUpdateQueue = signal<Set<string>>(new Set());
   updatesInProgress = computed(() => {
-    return this.updateQueue().size;
+    return this.albumUpdateQueue().size || this.releaseUpdateQueue().size;
   });
   queueAlbumsForThumbnailUpdate(...albumIds: string[]) {
     const needsUpdate = albumIds.filter((albumId) => !this.contains(albumId));
     if (needsUpdate) {
-      this.updateQueue.update((oldQueue) => new Set([...needsUpdate, ...oldQueue]));
+      this.albumUpdateQueue.update((oldQueue) => new Set([...needsUpdate, ...oldQueue]));
     }
+  }
+
+  queueReleasesForThumbnailUpdate(...releaseIds: string[]) {
+    const needsUpdate = releaseIds.filter((releaseId) => !this.contains(releaseId));
+    if (needsUpdate) {
+      this.releaseUpdateQueue.update((oldQueue) => new Set([...needsUpdate, ...oldQueue]));
+    }
+  }
+
+  getThumbnails(type: 'release' | 'release-group', first: string) {
+    return lastValueFrom(
+      this.http.get(`https://coverartarchive.org/${type}/` + first).pipe(
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        map((r: any) => r.images[0].thumbnails.small),
+        map((url) => ({
+          first,
+          url,
+        }))
+      )
+    );
   }
 
   updateThumbnailStore = effect(async () => {
     if (!this.ready()) return;
-    const updateQueue = this.updateQueue();
-    if (!updateQueue.size) return;
-    const toUpdate = [...updateQueue].slice(0, 10);
-    toUpdate.forEach((first) => updateQueue.delete(first));
+    const albumUpdateQueue = this.albumUpdateQueue();
+    const releaseUpdateQueue = this.releaseUpdateQueue();
+    if (!albumUpdateQueue.size && !releaseUpdateQueue.size) return;
+    const releaseToUpdate = [...releaseUpdateQueue].slice(0, 10);
+    const albumToUpdate = [...albumUpdateQueue].slice(0, 10 - releaseToUpdate.length);
+    releaseToUpdate.forEach((first) => releaseUpdateQueue.delete(first));
+    albumToUpdate.forEach((first) => albumUpdateQueue.delete(first));
+    console.log('updating', releaseToUpdate, albumToUpdate);
 
-    const results = await Promise.allSettled(
-      toUpdate.map((first) => {
-        return this.http
-          .get('https://coverartarchive.org/release-group/' + first)
-          .pipe(
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            map((r: any) => r.images[0].thumbnails.small)
-          )
-          .toPromise()
-          .then((url) => ({
-            first,
-            url,
-          }));
-      })
-    );
+    const results = await Promise.allSettled([
+      ...releaseToUpdate.map(this.getThumbnails.bind(this, 'release')),
+      ...albumToUpdate.map(this.getThumbnails.bind(this, 'release-group')),
+    ]);
+
     for (const result of results) {
       if (result.status == 'fulfilled') {
+        console.log('found', result.value.first);
         this.add(result.value.first, result.value.url);
       }
     }
-    this.updateQueue.set(new Set([...updateQueue]));
+    this.albumUpdateQueue.set(new Set([...albumUpdateQueue]));
+    this.releaseUpdateQueue.set(new Set([...releaseUpdateQueue]));
   });
 }
