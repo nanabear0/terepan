@@ -3,3 +3,9 @@
   height: 40px;
   width: 40px;
 }
+.medium-title {
+  background: var(--p-datatable-row-striped-background);
+  td {
+    text-align: center;
+  }
+}
