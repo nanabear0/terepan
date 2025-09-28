@@ -12,9 +12,12 @@ body {
 .heightFixedFieldset {
   .p-fieldset {
     height: 100%;
+    min-width: 0;
     .p-fieldset-content-container {
+      min-width: 0;
       height: 100%;
       .p-fieldset-content {
+        min-width: 0;
         height: 100%;
       }
     }
