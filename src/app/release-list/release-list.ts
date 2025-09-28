@@ -26,7 +26,7 @@ export class ArtistList {
   });
 
   msToDuration(ms: number) {
-    if (ms < 0) return '0:00';
+    if (!ms || ms < 0) return '';
     const s = Math.floor(ms / 1000);
     const m = Math.floor(s / 60);
     const h = Math.floor(m / 60);
