@@ -175,7 +175,7 @@ export class MusicBrainz {
   private infiniteRetry = retryWhen((err$) =>
     err$.pipe(
       mergeScan((attempt) => of(attempt + 1), 0),
-      delayWhen((attempt) => timer(50 * Math.pow(2, attempt - 1))),
+      delayWhen((attempt) => timer(1000 * (attempt - 1))),
       takeWhile(() => true) // retry forever
     )
   );
@@ -189,7 +189,7 @@ export class MusicBrainz {
   ): Observable<T[]> {
     const loadPage = (offset: number, acc: T[] = []): Observable<T[]> =>
       this.httpClient.get<any>(`${urlBase}&limit=${limit}&offset=${offset}`).pipe(
-        delay(50),
+        delay(1000),
         this.infiniteRetry,
         mergeMap((res: any) => {
           const newAcc = [...acc, ...mapFn(res)];
