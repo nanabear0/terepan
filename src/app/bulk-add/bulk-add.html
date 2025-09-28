@@ -82,7 +82,7 @@
   [visible]="!!artistInReview()"
   (onHide)="artistInReview.set(undefined)"
   position="bottom"
-  [style]="{ height: '80vh', padding: '8px' }"
+  [style]="{ height: '80vh', padding: '0.5rem' }"
 >
   <ng-template #headless>
     @if (artistInReview()?.list?.length) {
