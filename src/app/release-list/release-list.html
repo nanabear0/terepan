@@ -12,12 +12,12 @@
 >
   <ng-template #header>
     <tr class="nonTransparentHeader">
-      <th style="width: 50px"></th>
-      <th style="width: 32px">Cover</th>
+      <th style="width: 3.125rem"></th>
+      <th style="width: 3rem">Cover</th>
       <th>Format</th>
       <th>Tracks</th>
       <th>Country</th>
-      <th style="width: 128px">Date</th>
+      <th style="width: 8rem">Date</th>
     </tr>
   </ng-template>
   <ng-template #body let-release let-expanded="expanded">
@@ -38,7 +38,7 @@
           [type]="'release'"
           class="album-cover"
           [alt]="release.title"
-          placeholderStyle="font-size:40px"
+          placeholderStyle="font-size:3rem"
         ></app-album-cover>
       </td>
       <td>{{ release.format }}</td>
@@ -62,9 +62,9 @@
         >
           <ng-template #header>
             <tr>
-              <th width="44px">#</th>
-              <th width="auto">Title</th>
-              <th width="128px">Length</th>
+              <th style="width: 2.75rem">#</th>
+              <th>Title</th>
+              <th style="width: 8rem">Length</th>
             </tr>
           </ng-template>
           <ng-template #groupheader let-displayTrack>

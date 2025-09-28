@@ -34,6 +34,9 @@ export class AlbumList {
   http = inject(HttpClient);
   releaseTypesStore = inject(ReleaseTypesStore);
   useVirtualScroll = input<boolean>(false);
+  itemHeight =
+    (Number((getComputedStyle(document.documentElement) as any)?.['font-size']?.slice(0, -2)) ||
+      14) * 5;
   filteredAlbums = computed(() => {
     const { activeTypes } = this.releaseTypesStore.releaseTypes();
     return this.value().filter(

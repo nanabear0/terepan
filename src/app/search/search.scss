@@ -10,10 +10,10 @@
   grid-auto-rows: auto;
   gap: 0.5rem;
   grid-template-columns: 1fr 1fr 1fr;
-  @media (max-width: 1024px) {
+  @media (max-width: 64rem) {
     grid-template-columns: 1fr 1fr;
   }
-  @media (max-width: 640px) {
+  @media (max-width: 40rem) {
     grid-template-columns: 1fr;
   }
 }

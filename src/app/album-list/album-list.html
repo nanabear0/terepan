@@ -8,7 +8,7 @@
     scrollHeight="flex"
     [scrollable]="true"
     [virtualScroll]="useVirtualScroll()"
-    [virtualScrollItemSize]="61"
+    [virtualScrollItemSize]="itemHeight"
     sortField="firstReleaseDate"
     [sortOrder]="-1"
     dataKey="id"
@@ -16,12 +16,12 @@
   >
     <ng-template #header>
       <tr class="nonTransparentHeader">
-        <th width="64px">Cover</th>
+        <th style="width: 4rem">Cover</th>
         @if (showArtist()) {
         <th pSortableColumn="artist.name">Artist <p-sortIcon field="artist.name" /></th>
         }
         <th pSortableColumn="title">Title <p-sortIcon field="title" /></th>
-        <th width="128px" pSortableColumn="firstReleaseDate">
+        <th style="width: 8rem" pSortableColumn="firstReleaseDate">
           Date <p-sortIcon field="firstReleaseDate" />
         </th>
       </tr>

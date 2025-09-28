@@ -32,7 +32,7 @@ export class LatestReleases {
     return (
       this.followedArtistsStore
         .artists()
-        .flatMap((artist) => this.artistMetadataStore.readonlyCache()?.[artist]?.albums)
+        .flatMap((artist) => this.artistMetadataStore.get(artist)?.albums)
         ?.filter((x): x is Album => !!x) ?? []
     );
   });

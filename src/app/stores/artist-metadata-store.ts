@@ -41,9 +41,7 @@ export class ArtistMetadataStore {
   }
 
   updateMetadataCache() {
-    const artistsList: string[] = [
-      ...new Set([...this.followedArtistsStore.artists(), ...Object.keys(this.cache())]),
-    ];
+    const artistsList: string[] = [...new Set([...this.followedArtistsStore.artists()])];
     this.queueArtistUpdate(artistsList, true);
     this.queueAlbumUpdate(artistsList, true);
     this.lastMetadataUpdate.set(new Date());
