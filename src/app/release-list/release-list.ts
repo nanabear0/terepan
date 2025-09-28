@@ -15,6 +15,18 @@ import { Release } from '../music-brainz/release';
 export class ArtistList {
   value = input<Release[]>([]);
   localizer = new Intl.DisplayNames(['en'], { type: 'region' });
+  localizeCountryCode(code?: string) {
+    if (!code) return '';
+
+    switch (code) {
+      case 'XE':
+        return 'Europe';
+      case 'XW':
+        return 'Worldwide';
+      default:
+        return this.localizer.of(code);
+    }
+  }
 
   expandedRows = signal<Record<string, boolean>>({});
   expandFirstEffect = effect(() => {

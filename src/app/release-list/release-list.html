@@ -43,7 +43,7 @@
       </td>
       <td>{{ release.format }}</td>
       <td>{{ release.tracks }}</td>
-      <td>{{ release.country && localizer.of(release.country) }}</td>
+      <td>{{ localizeCountryCode(release.country) }}</td>
       <td>{{ release.date?.toLocaleDateString() }}</td>
     </tr>
   </ng-template>
