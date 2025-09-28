@@ -5,16 +5,16 @@
       <h2 class="album-title">
         {{ album()?.title }}
       </h2>
-      <a class="artist-name" [routerLink]="['/artist', artist()?.id]">{{ artist()?.name }}</a>
-      <span class="release-date"
-        >First release date: {{ album()?.firstReleaseDate?.toLocaleDateString() }}</span
-      >
       <div class="tags">
         <p-tag [value]="album()?.primaryType!" />
         @for (secondaryType of album()?.secondaryTypes;track $index) {
         <p-tag [value]="secondaryType" severity="secondary" />
         }
       </div>
+      <a class="artist-name" [routerLink]="['/artist', artist()?.id]">{{ artist()?.name }}</a>
+      <span class="release-date"
+        >Release date: {{ album()?.firstReleaseDate?.toLocaleDateString() }}</span
+      >
     </div>
   </p-panel>
   <p-fieldset legend="Releases" class="table-container heightFixedFieldset">
