@@ -56,7 +56,7 @@ export class MusicBrainz {
             name: raw['artist-credit']?.[0]?.artist.name,
           },
       title: raw.title,
-      firstReleaseDate: new Date(raw['first-release-date']),
+      firstReleaseDate: this.toDateOrUndefined(raw['first-release-date']),
       primaryType: raw['primary-type'],
       secondaryTypes: raw['secondary-types'],
     };
@@ -109,7 +109,7 @@ export class MusicBrainz {
       id: raw.id,
       status: raw.status,
       country: raw.country,
-      date: new Date(raw['date']),
+      date: this.toDateOrUndefined(raw['date']),
       media: raw['media']?.map(MusicBrainz.mapMedium),
       format: [...new Set([...(media?.map((x: Medium) => x?.format) ?? [])])].join(', '),
       tracks: media?.map((x: Medium) => x.trackCount).join('+'),

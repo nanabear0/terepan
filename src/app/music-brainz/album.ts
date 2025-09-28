@@ -3,7 +3,7 @@ import * as yup from 'yup';
 
 export interface Album {
   id: string;
-  firstReleaseDate: Date | null;
+  firstReleaseDate?: Date;
   artist?: Pick<Artist, 'id' | 'name'>;
   title: string;
   primaryType: string | null;
@@ -17,7 +17,7 @@ const partialArtistSchema = yup.object({
 
 export const albumSchema = yup.object({
   id: yup.string().required(),
-  firstReleaseDate: yup.date().required().nullable(),
+  firstReleaseDate: yup.date().optional(),
   artist: partialArtistSchema.optional(),
   title: yup.string().required(),
   primaryType: yup.string().required().nullable(),

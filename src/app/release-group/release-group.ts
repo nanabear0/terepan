@@ -55,11 +55,7 @@ export class ReleaseGroup {
       const album = this.album();
       if (album) {
         this.musicBrainzService.getReleasesOfAlbum(album).subscribe((releases) => {
-          this.releases.set(
-            releases.sort(
-              (a1: Release, a2: Release) => (a2.date?.getTime() ?? 0) - (a1.date?.getTime() ?? 0)
-            )
-          );
+          this.releases.set(releases);
         });
       }
     });

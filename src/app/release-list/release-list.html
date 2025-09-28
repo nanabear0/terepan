@@ -7,6 +7,8 @@
   dataKey="id"
   size="small"
   [expandedRowKeys]="expandedRows()"
+  sortField="date"
+  [sortOrder]="-1"
 >
   <ng-template #header>
     <tr class="nonTransparentHeader">
@@ -52,14 +54,13 @@
           size="small"
           [value]="release.displayTracks"
           dataKey="id"
-          groupRowsBy="medium.id"
+          groupRowsBy="medium.position"
           [rowGroupMode]="hasMultipleReleases ? 'subheader' : undefined"
+          sortField="position"
+          [sortOrder]="1"
         >
           <ng-template #header>
             <tr>
-              <!-- @if(hasMultipleReleases) {
-              <th>Medium</th>
-              } -->
               <th width="44px">#</th>
               <th width="auto">Title</th>
               <th width="128px">Length</th>
@@ -77,16 +78,6 @@
           </ng-template>
           <ng-template #body let-displayTrack let-rowgroup="rowgroup" let-rowspan="rowspan">
             <tr>
-              <!-- @if(hasMultipleReleases && rowgroup) {
-              <td [attr.rowspan]="rowspan">
-                <div>
-                  {{ displayTrack.medium.position }}
-                  {{ displayTrack.medium.format }} @if(displayTrack.medium.title) { :<br />
-                  {{ displayTrack.medium.title }}
-                  }
-                </div>
-              </td>
-              } -->
               <td>{{ displayTrack.position }}</td>
               <td>{{ displayTrack.title }}</td>
               <td>{{ msToDuration(displayTrack.length) }}</td>
