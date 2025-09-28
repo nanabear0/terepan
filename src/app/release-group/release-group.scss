@@ -29,7 +29,7 @@
   .tags {
     grid-area: tags;
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     gap: 8px;
     align-items: start;
   }
