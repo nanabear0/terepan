@@ -16,6 +16,7 @@ import { ThumbnailStore } from '../../stores/thumbnail-store';
 export class AlbumCover {
   id = input<string>();
   alt = input<string>();
+  placeholderStyle = input<string>();
   type = input<'release' | 'release-group'>('release-group');
   thumbnailStore = inject(ThumbnailStore);
 
@@ -24,11 +25,9 @@ export class AlbumCover {
     if (albumId) {
       switch (this.type()) {
         case 'release':
-          console.log('queue release', albumId, this.thumbnailStore.contains(albumId));
           this.thumbnailStore.queueReleasesForThumbnailUpdate(albumId);
           break;
         case 'release-group':
-          console.log('queue release-group', albumId, this.thumbnailStore.contains(albumId));
           this.thumbnailStore.queueAlbumsForThumbnailUpdate(albumId);
           break;
       }

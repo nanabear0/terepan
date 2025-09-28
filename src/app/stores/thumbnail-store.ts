@@ -112,7 +112,6 @@ export class ThumbnailStore {
     const albumToUpdate = [...albumUpdateQueue].slice(0, 10 - releaseToUpdate.length);
     releaseToUpdate.forEach((first) => releaseUpdateQueue.delete(first));
     albumToUpdate.forEach((first) => albumUpdateQueue.delete(first));
-    console.log('updating', releaseToUpdate, albumToUpdate);
 
     const results = await Promise.allSettled([
       ...releaseToUpdate.map(this.getThumbnails.bind(this, 'release')),
@@ -121,7 +120,6 @@ export class ThumbnailStore {
 
     for (const result of results) {
       if (result.status == 'fulfilled') {
-        console.log('found', result.value.first);
         this.add(result.value.first, result.value.url);
       }
     }

@@ -1,21 +1,20 @@
 import { Component, computed, effect, inject, signal } from '@angular/core';
 import { Title } from '@angular/platform-browser';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, RouterModule } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
 import { Fieldset } from 'primeng/fieldset';
 import { PanelModule } from 'primeng/panel';
 import { AlbumCover } from '../album-list/album-cover/album-cover';
-import { AlbumList } from '../album-list/album-list';
 import { MusicBrainz } from '../music-brainz/music-brainz';
-import { ArtistMetadataStore } from '../stores/artist-metadata-store';
-import { FollowedArtistsStore } from '../stores/followed-artists-store';
-import { Card } from 'primeng/card';
 import { Release } from '../music-brainz/release';
 import { ArtistList } from '../release-list/release-list';
+import { ArtistMetadataStore } from '../stores/artist-metadata-store';
+import { FollowedArtistsStore } from '../stores/followed-artists-store';
+import { Tag } from 'primeng/tag';
 
 @Component({
   selector: 'app-release-group',
-  imports: [AlbumList, ButtonModule, Fieldset, PanelModule, AlbumCover, Card, ArtistList],
+  imports: [ButtonModule, Fieldset, PanelModule, AlbumCover, ArtistList, RouterModule, Tag],
   templateUrl: './release-group.html',
   styleUrl: './release-group.scss',
 })
@@ -56,7 +55,11 @@ export class ReleaseGroup {
       const album = this.album();
       if (album) {
         this.musicBrainzService.getReleasesOfAlbum(album).subscribe((releases) => {
-          this.releases.set(releases);
+          this.releases.set(
+            releases.sort(
+              (a1: Release, a2: Release) => (a2.date?.getTime() ?? 0) - (a1.date?.getTime() ?? 0)
+            )
+          );
         });
       }
     });

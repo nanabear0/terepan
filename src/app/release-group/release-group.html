@@ -2,8 +2,19 @@
   <p-panel [showHeader]="false">
     <div class="albumPanel">
       <app-album-cover class="cover" [id]="album()?.id"></app-album-cover>
-      <h2 class="album-title">{{ album()?.title }}</h2>
-      <span class="artist-name">{{ artist()?.name }}</span>
+      <h2 class="album-title">
+        {{ album()?.title }}
+      </h2>
+      <a class="artist-name" [routerLink]="['/artist', artist()?.id]">{{ artist()?.name }}</a>
+      <span class="release-date"
+        >First release date: {{ album()?.firstReleaseDate?.toLocaleDateString() }}</span
+      >
+      <div class="tags">
+        <p-tag [value]="album()?.primaryType!" />
+        @for (secondaryType of album()?.secondaryTypes;track $index) {
+        <p-tag [value]="secondaryType" severity="secondary" />
+        }
+      </div>
     </div>
   </p-panel>
   <p-fieldset legend="Releases" class="table-container heightFixedFieldset">

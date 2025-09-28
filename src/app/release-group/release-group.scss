@@ -9,12 +9,12 @@
   display: grid;
   column-gap: 24px;
   row-gap: 12px;
-  grid-template-columns: auto 1fr;
-  grid-template-rows: auto auto;
+  grid-template-columns: auto 1fr auto;
+  grid-template-rows: auto auto auto;
   grid-template-areas:
-    'cover album-title'
-    'cover artist-name'
-    'cover _';
+    'cover album-title tags'
+    'cover artist-name tags'
+    'cover release-date tags';
   .cover {
     grid-area: cover;
     height: 128px;
@@ -25,10 +25,21 @@
     margin: 0;
     grid-area: album-title;
   }
+  .tags {
+    grid-area: tags;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    align-items: end;
+    justify-content: end;
+  }
   .artist-name {
     padding: 0;
     margin: 0;
     grid-area: artist-name;
+  }
+  .release-date {
+    grid-area: release-date;
   }
 }
 

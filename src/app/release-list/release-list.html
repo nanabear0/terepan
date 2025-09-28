@@ -4,35 +4,86 @@
   scrollHeight="flex"
   [value]="value()"
   [scrollable]="true"
-  [virtualScroll]="true"
-  [virtualScrollItemSize]="77"
-  sortField="date"
-  [sortOrder]="1"
   dataKey="id"
+  [expandedRowKeys]="expandedRows()"
 >
   <ng-template #header>
     <tr class="nonTransparentHeader">
+      <th style="width: 5rem"></th>
       <th>Cover</th>
       <th>Format</th>
       <th>Tracks</th>
       <th>Country</th>
-      <th pSortableColumn="date">Date <p-sortIcon field="date" /></th>
+      <th>Date</th>
     </tr>
   </ng-template>
-  <ng-template #body let-release sel>
+  <ng-template #body let-release let-expanded="expanded">
     <tr>
+      <td>
+        <p-button
+          type="button"
+          pRipple
+          [pRowToggler]="release"
+          [text]="true"
+          severity="secondary"
+          [rounded]="true"
+          [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"
+        />
+      </td>
       <td>
         <app-album-cover
           [id]="release.id"
           [type]="'release'"
           class="album-cover"
           [alt]="release.title"
+          placeholderStyle="font-size:40px"
         ></app-album-cover>
       </td>
       <td>{{ release.format }}</td>
       <td>{{ release.tracks }}</td>
       <td>{{ release.country && localizer.of(release.country) }}</td>
       <td>{{ release.date?.toLocaleDateString() }}</td>
+    </tr>
+  </ng-template>
+  <ng-template #expandedrow let-release>
+    @let hasMultipleReleases = release.media?.length >1;
+    <tr>
+      <td [colSpan]="6">
+        <p-table
+          [value]="release.displayTracks"
+          dataKey="id"
+          groupRowsBy="medium.id"
+          [rowGroupMode]="hasMultipleReleases ? 'rowspan' : undefined"
+        >
+          <ng-template #header>
+            <tr>
+              @if(hasMultipleReleases) {
+              <th>Medium</th>
+              }
+              <th>Position</th>
+              <th>Title</th>
+              <th>Length</th>
+            </tr>
+          </ng-template>
+          <ng-template #body let-displayTrack let-rowgroup="rowgroup" let-rowspan="rowspan">
+            <tr>
+              @if(hasMultipleReleases && rowgroup) {
+              <td [attr.rowspan]="rowspan">
+                <div>
+                  {{ displayTrack.medium.position }}
+                  {{ displayTrack.medium.format }} @if(displayTrack.medium.title) { :<br />
+                  {{ displayTrack.medium.title }}
+                  }
+                </div>
+              </td>
+              }
+              <td>{{ displayTrack.position }}</td>
+              <td>{{ displayTrack.title }}</td>
+              <td>{{ msToDuration(displayTrack.length) }}</td>
+            </tr>
+          </ng-template>
+        </p-table>
+      </td>
     </tr>
   </ng-template>
 </p-table>

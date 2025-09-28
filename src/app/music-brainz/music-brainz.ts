@@ -17,7 +17,7 @@ import {
 import { Album } from './album';
 import { Artist, ArtistWithAlbums } from './artist';
 import { ReleaseTypesStore } from '../stores/release-types-store';
-import { Release } from './release';
+import { DisplayTrack, Medium as Medium, Release, Track } from './release';
 
 @Injectable({
   providedIn: 'root',
@@ -72,14 +72,48 @@ export class MusicBrainz {
       );
   }
 
+  private static mapTrack(raw: any): Track {
+    return {
+      id: raw.id,
+      position: raw.position,
+      length: raw.length,
+      title: raw.title,
+    };
+  }
+
+  private static mapMedium(raw: any): Medium {
+    return {
+      id: raw.id,
+      title: raw.title,
+      format: raw.format,
+      position: raw.position,
+      trackCount: raw['track-count'],
+      tracks: raw['tracks']
+        ?.map(MusicBrainz.mapTrack)
+        .sort((a: Track, b: Track) => a.position - b.position),
+    };
+  }
   private static mapRelease(raw: any): Release {
+    const media: Medium[] = raw['media']
+      ?.map(MusicBrainz.mapMedium)
+      .sort((a: Medium, b: Medium) => a.position - b.position);
+    const displayTracks = media.flatMap((m) =>
+      m.tracks.map(
+        (t): DisplayTrack => ({
+          ...t,
+          medium: m,
+        })
+      )
+    );
     return {
       id: raw.id,
       status: raw.status,
       country: raw.country,
       date: new Date(raw['date']),
-      format: [...new Set([...(raw.media?.map((x: any) => x?.format) ?? [])])].join(', '),
-      tracks: raw.media?.map((x: any) => x?.['track-count']).join('+'),
+      media: raw['media']?.map(MusicBrainz.mapMedium),
+      format: [...new Set([...(media?.map((x: Medium) => x?.format) ?? [])])].join(', '),
+      tracks: media?.map((x: Medium) => x.trackCount).join('+'),
+      displayTracks,
     };
   }
 
@@ -186,7 +220,7 @@ export class MusicBrainz {
 
   public getReleasesOfAlbum(album: Album): Observable<Release[]> {
     return this.fetchAllPages<Release>(
-      `${MusicBrainz.API_ROOT}release?release-group=${album.id}&inc=media`,
+      `${MusicBrainz.API_ROOT}release?release-group=${album.id}&inc=recordings`,
       (album) => MusicBrainz.mapReleases(album),
       100,
       'release-count',

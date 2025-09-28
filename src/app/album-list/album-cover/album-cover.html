@@ -9,5 +9,5 @@
   [imageClass]="'imgThumbnail'"
 />
 } @else {
-<i class="pi pi-image" style="font-size: 48px"></i>
+<i class="pi pi-image" [style]="placeholderStyle() || 'font-size: 48px'"></i>
 }
