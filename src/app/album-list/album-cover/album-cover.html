@@ -6,7 +6,7 @@
   class="imgThumbnail"
   appendTo="body"
   [previewImageSrc]="`https://coverartarchive.org/${type()}/${idx}/front`"
-  [imageClass]="'imgThumbnail'"
+  [imageStyle]="{'max-width': '100%','object-fit': 'contain',}"
 />
 } @else {
 <i class="pi pi-image" [style]="placeholderStyle() || 'font-size: 48px'"></i>
