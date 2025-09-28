@@ -20,7 +20,10 @@ export class ArtistList {
   expandFirstEffect = effect(() => {
     const releases = this.value();
     if (releases.length) {
-      this.expandedRows.set({ [releases[0].id]: true });
+      const latestRelease = releases.reduce((pv, cv) =>
+        (pv?.date?.getTime() ?? 0) - (cv?.date?.getTime() ?? 0) >= 0 ? pv : cv
+      );
+      this.expandedRows.set({ [latestRelease.id]: true });
       this.expandFirstEffect.destroy();
     }
   });
