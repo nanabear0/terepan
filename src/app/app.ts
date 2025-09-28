@@ -7,8 +7,10 @@ import { ButtonModule } from 'primeng/button';
 import { MenubarModule } from 'primeng/menubar';
 import { ScrollPanelModule } from 'primeng/scrollpanel';
 import { ToastModule } from 'primeng/toast';
+import { ProgressBarModule } from 'primeng/progressbar';
 import { ArtistMetadataStore } from './stores/artist-metadata-store';
 import { ThumbnailStore } from './stores/thumbnail-store';
+import { MusicBrainz } from './music-brainz/music-brainz';
 @Component({
   selector: 'app-root',
   imports: [
@@ -20,6 +22,7 @@ import { ThumbnailStore } from './stores/thumbnail-store';
     AvatarModule,
     MenubarModule,
     ToastModule,
+    ProgressBarModule,
   ],
   templateUrl: './app.html',
   styleUrl: './app.scss',
@@ -57,10 +60,12 @@ export class App {
   artistMetadataStore = inject(ArtistMetadataStore);
   thumbnailStore = inject(ThumbnailStore);
   messageService = inject(MessageService);
+  musicBrainz = inject(MusicBrainz);
 
   constructor() {
     effect(() => {
-      if (this.artistMetadataStore.updateInProgress()) {
+      const progress = this.musicBrainz.totalProgress();
+      if (this.artistMetadataStore.updateInProgress() || progress) {
         this.messageService.add({
           summary: 'Metadata update in progress',
           detail: 'Content could be incomplete/outdated',

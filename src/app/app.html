@@ -1,6 +1,12 @@
+@let totalProgress = musicBrainz.totalProgress();
 <div class="app-root">
-  <p-menubar [model]="menubarItems">
+  <p-menubar [model]="menubarItems" style="position: relative">
     <ng-template #end>
+      <p-progressbar
+        class="progressBar"
+        [value]="((totalProgress?.[0] || 0) / (totalProgress?.[1]|| 1)) * 100"
+        [showValue]="false"
+      />
       <div class="menubarEnd">
         <p-button
           icon="pi pi-sync"

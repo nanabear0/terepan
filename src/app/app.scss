@@ -2,7 +2,7 @@
   display: grid;
   gap: 0.5rem;
   padding: 0.5rem;
-  grid-template-rows: min-content 1fr;
+  grid-template-rows: min-content 1fr auto;
   height: 100dvh;
   width: 100dvw;
 }
@@ -26,4 +26,11 @@
   flex-direction: row;
   gap: 0.5rem;
   align-items: center;
+}
+.progressBar {
+  height: 1px;
+  position: absolute;
+  width: calc(100% - 24px);
+  bottom: -1px;
+  left: 12px;
 }

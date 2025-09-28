@@ -152,6 +152,13 @@ export class ArtistMetadataStore {
     if (!this.ready()) return;
     const updateQueue = this.albumUpdateQueue();
     if (!updateQueue.size) return;
+    this.albumUpdateQueue.update((oq) => {
+      const nq = new Set(oq);
+      for (const v of updateQueue) {
+        nq.delete(v);
+      }
+      return new Set(nq);
+    });
     const results = await lastValueFrom(
       this.musicBrainz.getAlbumsOfArtists(
         [...updateQueue].map((id) => this.cache()[id]).filter((x) => x)
@@ -170,13 +177,6 @@ export class ArtistMetadataStore {
         artist.albums = artist.albums && MusicBrainz.cleanUpAlbums(artist.albums);
       });
       return nc;
-    });
-    this.albumUpdateQueue.update((oq) => {
-      const nq = new Set(oq);
-      for (const v of updateQueue) {
-        nq.delete(v);
-      }
-      return new Set(nq);
     });
   });
 

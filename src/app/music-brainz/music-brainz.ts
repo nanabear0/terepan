@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { HttpClient } from '@angular/common/http';
-import { inject, Injectable } from '@angular/core';
+import { computed, inject, Injectable, signal } from '@angular/core';
 import {
   delay,
   delayWhen,
@@ -180,6 +180,16 @@ export class MusicBrainz {
     )
   );
 
+  progress = signal<Record<string, [number, number]>>({});
+  totalProgress = computed<[number, number] | undefined>(() => {
+    const values = Object.values(this.progress());
+    if (!values?.length) return undefined;
+
+    return Object.values(this.progress()).reduce(
+      (pv, cv) => [pv[0] + cv[0], pv[1] + cv[1]],
+      [0, 0]
+    );
+  });
   private fetchAllPages<T>(
     urlBase: string,
     mapFn: (raw: unknown) => T[],
@@ -187,6 +197,7 @@ export class MusicBrainz {
     countKey = 'count',
     offsetKey = 'offset'
   ): Observable<T[]> {
+    const runId = crypto.randomUUID();
     const loadPage = (offset: number, acc: T[] = []): Observable<T[]> =>
       this.httpClient.get<any>(`${urlBase}&limit=${limit}&offset=${offset}`).pipe(
         delay(1000),
@@ -194,11 +205,23 @@ export class MusicBrainz {
         mergeMap((res: any) => {
           const newAcc = [...acc, ...mapFn(res)];
           const fixedOffset = res[offsetKey] ?? offset;
-          return (res[countKey] ?? 0) <= fixedOffset + limit
-            ? of(newAcc)
-            : loadPage(fixedOffset + limit, newAcc);
+
+          if ((res[countKey] ?? 0) <= fixedOffset + limit) {
+            this.progress.update((ov) => {
+              delete ov[runId];
+              return { ...ov };
+            });
+            return of(newAcc);
+          } else {
+            this.progress.update((ov) => ({
+              ...ov,
+              [runId]: [fixedOffset + limit, res[countKey] ?? 0],
+            }));
+            return loadPage(fixedOffset + limit, newAcc);
+          }
         })
       );
+    this.progress.update((ov) => ({ ...ov, [runId]: [0, 0] }));
     return loadPage(0);
   }
 
