@@ -1,4 +1,4 @@
-# Terepan v2.0
+# Terepan
 
 [Start using terepan!](https://nanabear0.github.io/terepan)
 
