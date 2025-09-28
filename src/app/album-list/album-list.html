@@ -7,20 +7,23 @@
     [scrollable]="true"
     scrollHeight="flex"
     [scrollable]="true"
-    [virtualScroll]="true"
-    [virtualScrollItemSize]="77"
+    [virtualScroll]="useVirtualScroll()"
+    [virtualScrollItemSize]="61"
     sortField="firstReleaseDate"
     [sortOrder]="-1"
     dataKey="id"
+    size="small"
   >
     <ng-template #header>
       <tr class="nonTransparentHeader">
-        <th>Cover</th>
+        <th width="64px">Cover</th>
         @if (showArtist()) {
         <th pSortableColumn="artist.name">Artist <p-sortIcon field="artist.name" /></th>
         }
         <th pSortableColumn="title">Title <p-sortIcon field="title" /></th>
-        <th pSortableColumn="firstReleaseDate">Date <p-sortIcon field="firstReleaseDate" /></th>
+        <th width="128px" pSortableColumn="firstReleaseDate">
+          Date <p-sortIcon field="firstReleaseDate" />
+        </th>
       </tr>
     </ng-template>
     <ng-template #body let-album>
@@ -50,7 +53,7 @@
             }
           </div>
         </td>
-        <td>{{ album.firstReleaseDate.toLocaleDateString() }}</td>
+        <td>{{ album.firstReleaseDate?.toLocaleDateString() }}</td>
       </tr>
     </ng-template>
   </p-table>

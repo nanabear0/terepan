@@ -3,21 +3,21 @@
   grid-template-rows: min-content 1fr;
   max-height: 100%;
   height: 100%;
-  gap: 12px;
+  gap: 8px;
 }
 .textarea {
   width: 100%;
 }
 .input-fields {
   display: grid;
-  gap: 12px;
+  gap: 8px;
   grid-template-columns: 1fr;
   grid-template-rows: 128px;
   grid-auto-rows: auto;
   .actions {
     display: flex;
     flex-direction: row;
-    gap: 12px;
+    gap: 8px;
   }
 }
 .table-container {

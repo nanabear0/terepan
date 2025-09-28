@@ -37,6 +37,7 @@
     <p-fieldset legend="Review" class="table-container heightFixedFieldset">
       <div class="partialMatchList">
         <p-table
+          size="small"
           [value]="partialMatches()"
           [scrollable]="true"
           scrollHeight="flex"
@@ -81,7 +82,7 @@
   [visible]="!!artistInReview()"
   (onHide)="artistInReview.set(undefined)"
   position="bottom"
-  [style]="{ height: '80vh', padding: '12px' }"
+  [style]="{ height: '80vh', padding: '8px' }"
 >
   <ng-template #headless>
     @if (artistInReview()?.list?.length) {

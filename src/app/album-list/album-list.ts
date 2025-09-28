@@ -33,6 +33,7 @@ export class AlbumList {
   showArtist = input<boolean>(false);
   http = inject(HttpClient);
   releaseTypesStore = inject(ReleaseTypesStore);
+  useVirtualScroll = input<boolean>(false);
   filteredAlbums = computed(() => {
     const { activeTypes } = this.releaseTypesStore.releaseTypes();
     return this.value().filter(

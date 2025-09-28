@@ -9,6 +9,11 @@ body {
   font-family: Roboto, 'Helvetica Neue', sans-serif;
 }
 
+.p-datatable-flex-scrollable {
+  min-height: 0;
+  min-width: 0;
+}
+
 .heightFixedFieldset {
   .p-fieldset {
     height: 100%;

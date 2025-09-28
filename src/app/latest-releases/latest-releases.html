@@ -1,5 +1,9 @@
 <div class="root">
   <p-fieldset legend="Latest Releases" class="table-container heightFixedFieldset">
-    <app-album-list [value]="latestReleases()" [showArtist]="true"></app-album-list>
+    <app-album-list
+      [value]="latestReleases()"
+      [showArtist]="true"
+      [useVirtualScroll]="true"
+    ></app-album-list>
   </p-fieldset>
 </div>

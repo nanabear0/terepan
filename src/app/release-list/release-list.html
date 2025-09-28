@@ -5,26 +5,25 @@
   [value]="value()"
   [scrollable]="true"
   dataKey="id"
+  size="small"
   [expandedRowKeys]="expandedRows()"
 >
   <ng-template #header>
     <tr class="nonTransparentHeader">
-      <th style="width: 5rem"></th>
-      <th>Cover</th>
+      <th style="width: 50px"></th>
+      <th style="width: 32px">Cover</th>
       <th>Format</th>
       <th>Tracks</th>
       <th>Country</th>
-      <th>Date</th>
+      <th style="width: 128px">Date</th>
     </tr>
   </ng-template>
   <ng-template #body let-release let-expanded="expanded">
     <tr>
       <td>
         <p-button
-          type="button"
           pRipple
           [pRowToggler]="release"
-          [text]="true"
           severity="secondary"
           [rounded]="true"
           [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"
@@ -50,6 +49,7 @@
     <tr>
       <td [colSpan]="6">
         <p-table
+          size="small"
           [value]="release.displayTracks"
           dataKey="id"
           groupRowsBy="medium.id"
@@ -58,11 +58,11 @@
           <ng-template #header>
             <tr>
               @if(hasMultipleReleases) {
-              <th>Medium</th>
+              <th width="160px">Medium</th>
               }
-              <th>#</th>
+              <th width="44px">#</th>
               <th>Title</th>
-              <th>Length</th>
+              <th width="128px">Length</th>
             </tr>
           </ng-template>
           <ng-template #body let-displayTrack let-rowgroup="rowgroup" let-rowspan="rowspan">

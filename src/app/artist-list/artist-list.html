@@ -4,10 +4,9 @@
   scrollHeight="flex"
   [value]="value()"
   [scrollable]="true"
-  [virtualScroll]="true"
-  [virtualScrollItemSize]="62"
   [sortField]="noScore() ? 'name' : 'score'"
   [sortOrder]="noScore() ? 1 : -1"
+  size="small"
   dataKey="id"
 >
   <ng-template #header>
@@ -72,7 +71,7 @@
   [visible]="!!selectedArtist()"
   (onHide)="selectedArtist.set(undefined)"
   position="bottom"
-  [style]="{ height: '80vh', padding: '12px' }"
+  [style]="{ height: '80vh', padding: '8px' }"
 >
   <ng-template #headless>
     @if (!!selectedArtist()) {

@@ -1,7 +1,7 @@
 .app-root {
   display: grid;
-  gap: 12px;
-  padding: 12px;
+  gap: 8px;
+  padding: 8px;
   grid-template-rows: min-content 1fr;
   height: 100dvh;
   width: 100dvw;
@@ -9,7 +9,7 @@
 .messageGroup {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 8px;
 }
 .content {
   max-height: 100%;
@@ -18,12 +18,12 @@
 .pageLinks {
   display: flex;
   flex-direction: row;
-  gap: 12px;
+  gap: 8px;
   flex-wrap: wrap;
 }
 .menubarEnd {
   display: flex;
   flex-direction: row;
-  gap: 12px;
+  gap: 8px;
   align-items: center;
 }

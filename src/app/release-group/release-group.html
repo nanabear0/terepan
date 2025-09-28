@@ -1,7 +1,11 @@
 <div class="root">
   <p-panel [showHeader]="false">
     <div class="albumPanel">
-      <app-album-cover class="cover" [id]="album()?.id"></app-album-cover>
+      <app-album-cover
+        class="cover"
+        [id]="album()?.id"
+        placeholderStyle="font-size: 128px"
+      ></app-album-cover>
       <h2 class="album-title">
         {{ album()?.title }}
       </h2>
