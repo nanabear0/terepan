@@ -34,10 +34,12 @@
     "@angular/platform-browser": "^20.2.0",
     "@angular/router": "^20.2.0",
     "@primeuix/themes": "^1.2.3",
+    "@types/sql.js": "^1.4.9",
     "idb": "^8.0.3",
     "primeicons": "^7.0.0",
     "primeng": "^20.1.1",
     "rxjs": "~7.8.0",
+    "sql.js": "1.13.0",
     "tslib": "^2.3.0",
     "yup": "^1.7.0"
   },
@@ -56,6 +58,11 @@
     "karma-jasmine-html-reporter": "~2.1.0",
     "typescript": "~5.9.2",
     "typescript-eslint": "8.40.0"
+  },
+  "browser": {
+    "crypto": false,
+    "fs": false,
+    "path": false
   },
   "overrides": {
     "@parcel/watcher": "2.2.0"

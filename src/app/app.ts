@@ -56,6 +56,10 @@ export class App {
       routerLink: '/bulk-add',
       label: 'Bulk Add',
     },
+    {
+      routerLink: '/archive',
+      label: 'Archive',
+    },
   ];
   artistMetadataStore = inject(ArtistMetadataStore);
   thumbnailStore = inject(ThumbnailStore);

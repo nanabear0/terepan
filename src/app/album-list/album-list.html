@@ -9,18 +9,18 @@
     [scrollable]="true"
     [virtualScroll]="useVirtualScroll()"
     [virtualScrollItemSize]="itemHeight"
-    sortField="firstReleaseDate"
-    [sortOrder]="-1"
+    [sortField]="sortField()"
+    [sortOrder]="sortOrder()"
     dataKey="id"
     size="small"
   >
     <ng-template #header>
       <tr class="nonTransparentHeader">
         <th style="width: 4rem">Cover</th>
+        <th pSortableColumn="title">Title <p-sortIcon field="title" /></th>
         @if (showArtist()) {
         <th pSortableColumn="artist.name">Artist <p-sortIcon field="artist.name" /></th>
         }
-        <th pSortableColumn="title">Title <p-sortIcon field="title" /></th>
         <th style="width: 8rem" pSortableColumn="firstReleaseDate">
           Date <p-sortIcon field="firstReleaseDate" />
         </th>
@@ -35,11 +35,6 @@
             [alt]="album.title"
           ></app-album-cover>
         </td>
-        @if (showArtist()) {
-        <td>
-          <a [routerLink]="['/artist', album.artist.id]">{{ album.artist.name }}</a>
-        </td>
-        }
         <td>
           <div class="artistCell">
             <a
@@ -47,12 +42,17 @@
               [skipLocationChange]="false"
               >{{ album.title }}</a
             >
-            <p-tag [value]="album.primaryType" />
+            <p-tag [value]="album.primaryType" style="justify-self: end" />
             @for (secondaryType of album.secondaryTypes;track $index) {
-            <p-tag [value]="secondaryType" severity="secondary" />
+            <p-tag [value]="secondaryType" severity="secondary" style="justify-self: end" />
             }
           </div>
         </td>
+        @if (showArtist()) {
+        <td>
+          <a [routerLink]="['/artist', album.artist.id]">{{ album.artist.name }}</a>
+        </td>
+        }
         <td>{{ album.firstReleaseDate?.toLocaleDateString() }}</td>
       </tr>
     </ng-template>

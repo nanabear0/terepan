@@ -31,6 +31,9 @@ import { AlbumCover } from './album-cover/album-cover';
 export class AlbumList {
   value = input<Album[]>([]);
   showArtist = input<boolean>(false);
+
+  sortField = input('firstReleaseDate');
+  sortOrder = input(-1);
   http = inject(HttpClient);
   releaseTypesStore = inject(ReleaseTypesStore);
   useVirtualScroll = input<boolean>(false);

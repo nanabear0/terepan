@@ -7,8 +7,10 @@ import { Import } from './import/import';
 import { LatestReleases } from './latest-releases/latest-releases';
 import { BulkAdd } from './bulk-add/bulk-add';
 import { ReleaseGroup } from './release-group/release-group';
+import { Archive } from './archive/archive';
 
 export const routes: Routes = [
+  { path: 'archive', component: Archive, title: 'Terepan - Archive' },
   { path: 'search', component: Search, title: 'Terepan - Search' },
   { path: 'followed-artists', component: FollowedArtists, title: 'Terepan - Followed Artists' },
   { path: 'latest-releases', component: LatestReleases, title: 'Terepan - Latest Releases' },

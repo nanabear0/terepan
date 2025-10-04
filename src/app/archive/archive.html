@@ -1,0 +1,19 @@
+<div class="root">
+  <p-fieldset legend="Upload Beets DB">
+    <p-fileupload mode="basic" chooseLabel="Upload .db" (onSelect)="onUpload($event)" />
+  </p-fieldset>
+
+  @if(beetsDbStore.cacheAvailable()) {
+  <p-fieldset legend="Missing Releases" class="table-container heightFixedFieldset">
+    <app-album-list
+      [value]="missingReleases()"
+      [showArtist]="true"
+      [useVirtualScroll]="true"
+      [sortField]="'artist.name'"
+      [sortOrder]="1"
+    ></app-album-list>
+  </p-fieldset>
+  } @else {
+  <p-message severity="info">Import your beets .db file to get started</p-message>
+  }
+</div>
