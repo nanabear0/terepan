@@ -9,6 +9,7 @@ import {
   mergeScan,
   Observable,
   of,
+  retry,
   retryWhen,
   takeWhile,
   tap,
@@ -52,9 +53,9 @@ export class MusicBrainz {
       artist: artist
         ? artist
         : {
-            id: raw['artist-credit']?.[0]?.artist.id,
-            name: raw['artist-credit']?.[0]?.artist.name,
-          },
+          id: raw['artist-credit']?.[0]?.artist.id,
+          name: raw['artist-credit']?.[0]?.artist.name,
+        },
       title: raw.title,
       firstReleaseDate: this.toDateOrUndefined(raw['first-release-date']),
       primaryType: raw['primary-type'],
@@ -172,13 +173,11 @@ export class MusicBrainz {
     );
   }
 
-  private infiniteRetry = retryWhen((err$) =>
-    err$.pipe(
-      mergeScan((attempt) => of(attempt + 1), 0),
-      delayWhen((attempt) => timer(1000 * (attempt - 1))),
-      takeWhile(() => true) // retry forever
-    )
-  );
+  private infiniteRetry = retry({
+    delay: (errorCount) => {
+      return timer(1000 * (errorCount - 1))
+    }
+  })
 
   progress = signal<Record<string, [number, number]>>({});
   totalProgress = computed<[number, number] | undefined>(() => {

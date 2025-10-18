@@ -5,20 +5,24 @@
   height: 100%;
   gap: 0.5rem;
 }
+
 .textarea {
   width: 100%;
 }
+
 .input-fields {
   display: grid;
   gap: 0.5rem;
   grid-template-columns: 1fr;
   grid-template-rows: 8rem;
   grid-auto-rows: auto;
+
   .actions {
     display: flex;
     flex-direction: row;
     gap: 0.5rem;
     justify-content: space-between;
+
     .message {
       flex-grow: 1;
     }
@@ -30,15 +34,19 @@
   flex-direction: column;
   gap: 0.5rem;
 }
+
 .reviewPane {
   display: grid;
   gap: 0.5rem;
   height: 100%;
+  min-height: 0;
   grid-template-columns: 1fr 1fr;
+
   @media (max-width: 40rem) {
     grid-template-columns: 1fr;
     grid-template-rows: 1fr 1fr;
   }
+
   .partialMatchList {
     display: flex;
     flex-direction: column;
@@ -46,9 +54,11 @@
     height: 100%;
   }
 }
+
 .artist {
   height: 100%;
 }
+
 .tableActions {
   display: flex;
   flex-direction: row;

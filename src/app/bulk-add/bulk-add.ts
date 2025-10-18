@@ -73,7 +73,10 @@ export class BulkAdd {
     this.partialMatches.set([]);
     this.itemsInProgress.set(lines.length);
     this.totalSearchQueued.set(lines.length);
-    await Promise.allSettled(lines.map((line) => this.searchItem(line, this.useResult.bind(this))));
+    for (const line of lines) {
+      await this.searchItem(line, this.useResult.bind(this))
+      await new Promise((resolve) => setTimeout(() => resolve(undefined), 800))
+    }
     this.bulkAddForm.controls.input.setValue('');
   }
 
